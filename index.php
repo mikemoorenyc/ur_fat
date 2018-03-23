@@ -17,6 +17,8 @@ if(!$_SESSION['logged_in']) {
 <INPUT type="text" id="item_amount" name="item_amount" />
 <label for="item_description">Notes</label>
 <textarea id="item_description" name="item_description"></textarea>
+<label for="item_date">When</label>
+<input type="datetime-local" />
 <button type="submit">Add Item</button>
 
 </form>
