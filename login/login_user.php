@@ -12,7 +12,7 @@ function badLogin() {
 }
 
 //CHECK IF EMAIL EXISTS
-$get_user =  "SELECT email, password FROM users WHERE `email` = '".mysql_real_escape_string($_POST['email'])."' LIMIT 1";
+$get_user =  "SELECT id, email, password FROM users WHERE `email` = '".mysql_real_escape_string($_POST['email'])."' LIMIT 1";
 $user = $db_conn->query($get_user);
 if($user->num_rows < 1) {
   badLogin();
@@ -25,6 +25,7 @@ if(!$pass_pass) {
   badLogin();
 }
 $_SESSION['logged_in'] = true;
+$_SESSION['current_user'] = $user['id'];
 $current_URL  = (isset($_SERVER['HTTPS']) ? "https" : "http") . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
 $index_URL = str_replace('login/login_user.php','',$current_URL);
 header("Location: ".$index_URL);
