@@ -30,6 +30,33 @@ $now = new DateTime();
 $ny_time  = new DateTimeZone('America/New_York');
 $now->setTimezone($ny_time);
 
-echo strtotime($now->format('Y-m-d 00:00:00 O')).'<br/><br/>';
-echo strtotime($now->format('Y-m-d 23:59:59 O')).'<br/><br/>';
- ?>
+$startTime =  strtotime($now->format('Y-m-d 00:00:00 O'));
+$endTime = strtotime($now->format('Y-m-d 23:59:59 O'));
+
+$query = "SELECT * FROM posts WHERE post_date BETWEEN $startTime AND $endTime ORDER BY post_date DESC";
+$today_posts = mysqli_query($db_conn, $query);
+if($today_posts) {
+  while ($row = $today_posts->fetch_assoc()) {
+     $rows[] = $row;
+   }
+}
+if(!empty($rows)):?>
+<ul>
+<?php foreach($rows as $r):?>
+  <li>
+    <h2><?= $r['post_title'];?></h2>
+    <form method="POST" action="delete-item.php">
+      <input type="hidden" value="<?=$r['id'];?>" />
+      <button type="submit">Delete</button>
+    </form>
+
+  </li>
+
+
+<?php endforeach;?>
+
+</ul>
+
+
+
+<?php endif;?>
