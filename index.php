@@ -45,7 +45,7 @@ if(!empty($rows)):?>
 <?php foreach($rows as $r):?>
   <?php
   $_SESSION['deltoken_'.$r['id']] = genToken(); 
-  
+  $_SESSION['updatetoken_'.$r['id']] = genToken(); 
   ?>
   <li>
     <h2><?= $r['post_title'];?></h2>
@@ -54,6 +54,12 @@ if(!empty($rows)):?>
       <input type="hidden"  name="noonce_key" value="deltoken_<?= $r['id'];?>" />
       <input type="hidden"  name="<?='deltoken_'.$r['id'];?>" value="<?=$_SESSION['deltoken_'.$r['id']];?>" />
       <button type="submit">Delete</button>
+    </form>
+    
+    <form method="POST" action="update-item.php">
+      <input type="hidden"  name="noonce_key" value="updatetoken_<?= $r['id'];?>" />
+      <input type="hidden"  name="<?='deltoken_'.$r['id'];?>" value="<?=$_SESSION['deltoken_'.$r['id']];?>" />
+      <button type="submit">Save</button>
     </form>
 
   </li>
