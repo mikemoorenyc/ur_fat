@@ -43,10 +43,16 @@ if($today_posts) {
 if(!empty($rows)):?>
 <ul>
 <?php foreach($rows as $r):?>
+  <?php
+  $_SESSION['deltoken_'.$r['id']] = genToken(); 
+  
+  ?>
   <li>
     <h2><?= $r['post_title'];?></h2>
     <form method="POST" action="delete-item.php">
-      <input type="hidden" value="<?=$r['id'];?>" />
+      <input type="hidden" name="delete_id" value="<?=$r['id'];?>" />
+      <input type="hidden"  name="noonce_key" value="deltoken_<?= $r['id'];?>" />
+      <input type="hidden"  name="<?='deltoken_'.$r['id'];?>" value="<?=$_SESSION['deltoken_'.$r['id']];?>" />
       <button type="submit">Delete</button>
     </form>
 
