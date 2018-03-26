@@ -3,8 +3,8 @@ require_once 'header.php'
 require_once 'request_check.php';
 
 //WE ARE READY TO DELETE
-
-$delete =  "DELETE FROM posts WHERE id=$_POST['delete_id']";
+$del_id = mysql_real_escape_string($_POST['delete_id']);
+$delete =  "DELETE FROM posts WHERE id=$del_id";
 $delete_item = mysqli_query($db_conn, $delete);
 
 
