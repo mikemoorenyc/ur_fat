@@ -58,6 +58,7 @@ if(!empty($rows)):?>
     
     <form method="POST" action="update-item.php">
       <input type="hidden"  name="noonce_key" value="updatetoken_<?= $r['id'];?>" />
+      <input type="hidden" name="update_id" value="<?=$r['id'];?>" />
       <input type="hidden"  name="<?='deltoken_'.$r['id'];?>" value="<?=$_SESSION['deltoken_'.$r['id']];?>" />
       <button type="submit">Save</button>
     </form>
