@@ -3,7 +3,7 @@
 require_once 'header.php';
 
 
-if(!$_SESSION['logged_in']) {
+if(!user_check()) {
   $index_URL  = (isset($_SERVER['HTTPS']) ? "https" : "http") . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
   $base = str_replace('index.php','',$index_URL);
   header("Location: ".$base.'login/');
@@ -26,9 +26,13 @@ if(!$_SESSION['logged_in']) {
 
 </form>
 <?php
+
+
+
 $now = new DateTime();
 $ny_time  = new DateTimeZone('America/New_York');
 $now->setTimezone($ny_time);
+$now->modify(intval($_GET['offset']).' day');
 
 $startTime =  strtotime($now->format('Y-m-d 00:00:00 O'));
 $endTime = strtotime($now->format('Y-m-d 23:59:59 O'));
@@ -44,8 +48,8 @@ if(!empty($rows)):?>
 <ul>
 <?php foreach($rows as $r):?>
   <?php
-  $_SESSION['deltoken_'.$r['id']] = genToken(); 
-  $_SESSION['updatetoken_'.$r['id']] = genToken(); 
+  $_SESSION['deltoken_'.$r['id']] = genToken();
+  $_SESSION['updatetoken_'.$r['id']] = genToken();
   ?>
   <li>
     <h2><?= $r['post_title'];?></h2>
@@ -55,7 +59,7 @@ if(!empty($rows)):?>
       <input type="hidden"  name="<?='deltoken_'.$r['id'];?>" value="<?=$_SESSION['deltoken_'.$r['id']];?>" />
       <button type="submit">Delete</button>
     </form>
-    
+
     <form method="POST" action="update-item.php">
       <input type="hidden"  name="noonce_key" value="updatetoken_<?= $r['id'];?>" />
       <input type="hidden" name="update_id" value="<?=$r['id'];?>" />

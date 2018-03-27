@@ -1,6 +1,8 @@
 <?php
-require_once 'header.php'
-require_once 'request_check.php';
+require_once 'header.php';
+if(!request_check()) {
+  die('Bad Request');
+}
 
 //WE ARE READY TO DELETE
 $del_id = mysql_real_escape_string($_POST['delete_id']);

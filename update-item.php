@@ -1,6 +1,8 @@
 <?php
 require_once 'header.php';
-require_once 'request_check.php';
+if(!request_check()) {
+  die('Bad Request');
+}
 
 $id = mysql_real_escape_string($_POST['update_id']);
 

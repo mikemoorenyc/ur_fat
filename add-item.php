@@ -1,7 +1,9 @@
 <?php
 require_once 'header.php';
 
-require_once 'request_check.php';
+if(!request_check()) {
+  die('Bad Request');
+}
 
 //READY TO GO
 
