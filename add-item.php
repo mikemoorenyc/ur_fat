@@ -1,7 +1,7 @@
 <?php
 require_once 'header.php';
 
-if(!request_check()) {
+if(!check_request()) {
   die('Bad Request');
 }
 
@@ -24,6 +24,9 @@ if ($insert_item) {
 } else {
   echo 'bad';
 }
+
+
+//NON API CALL
 $_SESSION[$_POST['noonce_key']] = '';
 
 header("Location: ".$_SERVER['HTTP_REFERER']);
