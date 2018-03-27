@@ -5,14 +5,12 @@ if(!request_check()) {
   die('Bad Request');
 }
 
-//READY TO GO
-
 
 
 $title = mysql_real_escape_string($_POST['item_title']);
 $amount = mysql_real_escape_string($_POST['item_amount']);
 $desc = mysql_real_escape_string($_POST['item_description']);
-$date = time();
+$date = parse_time($_POST['post_date']) ?: time();
 $author = $_SESSION['current_user'];
 $insert = "INSERT INTO posts (post_title, post_description, post_amount, author, post_date)
   VALUES ('$title','$desc','$amount','$author','$date')";
