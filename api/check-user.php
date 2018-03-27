@@ -1,0 +1,19 @@
+<?php
+require_once '../header.php';
+
+function return_user($logged_in, $id=null) {
+  echo json_encode(array(
+    'logged_in' => $logged_in,
+    'id' => $id
+  ));
+  die();
+}
+
+if($_SESSION['logged_in'] && $_SESSION['current_user']) {
+  return_user(true, $_SESSION['current_user']);
+} else {
+  return_user(false);
+}
+
+
+?>
