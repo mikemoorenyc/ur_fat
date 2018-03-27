@@ -6,7 +6,7 @@ require_once 'header.php';
 if(!is_user_logged_in()) {
   $index_URL  = (isset($_SERVER['HTTPS']) ? "https" : "http") . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
   $base = str_replace('index.php','',$index_URL);
-  header("Location: ".$base.'login-page.php');
+  header("Location: user-login.php",TRUE,303);
   die();
 }
 ?>
