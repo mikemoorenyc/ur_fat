@@ -9,7 +9,7 @@ function return_user($logged_in, $id=null) {
   die();
 }
 
-if($_SESSION['logged_in'] && $_SESSION['current_user']) {
+if(check_user()) {
   return_user(true, $_SESSION['current_user']);
 } else {
   return_user(false);
