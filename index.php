@@ -1,7 +1,7 @@
 <?php
 
 require_once 'header.php';
-
+var_dump(is_user_logged_in());
 
 if(!is_user_logged_in()) {
   $index_URL  = (isset($_SERVER['HTTPS']) ? "https" : "http") . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
@@ -11,7 +11,7 @@ if(!is_user_logged_in()) {
 }
 ?>
 <form id="add-item" method="POST" action="add-item.php">
-  <?php $_SESSION['add_item_noonce'] = genToken(); ?>
+
   <input type="hidden" id="add_item_noonce" name="add_item_noonce" value="<?= $_SESSION['add_item_noonce'];?>" />
   <input type="hidden" id="add_noonce_key" name="noonce_key" value="add_item_noonce" />
   <label for="item_title">Food</label>

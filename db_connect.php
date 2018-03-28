@@ -16,8 +16,6 @@ if(!$result->num_rows) {
   $need_to_install = true;
 }
 
-if($need_to_install) {
-  die('<a href="install.php">Install URFAT</a>');
-}
+
 
  ?>

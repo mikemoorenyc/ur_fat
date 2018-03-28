@@ -5,8 +5,8 @@ function verify_login($email=null,$password=null) {
     return false;
   }
 
-  //CHECK IF EMAIL EXISTS
-  $get_user =  "SELECT * FROM users WHERE `email` = '".mysql_real_escape_string($email)."' LIMIT 1";
+    $get_user =  "SELECT id,email,reg_date FROM users WHERE `email` = '".mysql_real_escape_string($email)."' LIMIT 1";
+
   $user = $db_conn->query($get_user);
   if($user->num_rows < 1) {
     return false;
@@ -14,12 +14,12 @@ function verify_login($email=null,$password=null) {
   $user = $user->fetch_assoc();
 
   //CHECK PASSWORD
-  $pass_pass = password_verify(base64_encode(hash('sha256', $password, true)),$password);
+$pass_pass = password_verify(base64_encode(hash('sha256', $password, true)),$user['password']);
   if(!$pass_pass) {
     return false;
   }
 
-  return $user['id'];
+  return get_user($user['id']) ;
 
 }
 

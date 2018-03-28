@@ -38,7 +38,7 @@ if(!$create_posts || !$create_tokens || !$create_users) {
   die('something went wrong');
 }
 
-echo 'Tables created <a href="install.php">Go to URFAT</a>';
+echo 'Tables created <a href="index.php">Go to URFAT</a>';
 die();
 
  ?>
