@@ -1,7 +1,7 @@
 <?php
 
 require_once 'header.php';
-var_dump(is_user_logged_in());
+
 
 if(!is_user_logged_in()) {
   $index_URL  = (isset($_SERVER['HTTPS']) ? "https" : "http") . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
@@ -10,6 +10,13 @@ if(!is_user_logged_in()) {
   die();
 }
 ?>
+<?php
+echo 'ready';
+die();
+
+ ?>
+</section>
+</section>
 <form id="add-item" method="POST" action="add-item.php">
 
   <input type="hidden" id="add_item_noonce" name="add_item_noonce" value="<?= $_SESSION['add_item_noonce'];?>" />
