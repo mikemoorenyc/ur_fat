@@ -9,31 +9,28 @@ if(!is_user_logged_in()) {
   header("Location: user-login.php",TRUE,303);
   die();
 }
-?>
-<?php
-echo 'ready';
-die();
+
+
+$_SESSION['add_item_noonce'] = generate_noonce();
 
  ?>
-</section>
-</section>
-<form id="add-item" method="POST" action="add-item.php">
+<form id="add-item" method="POST" action="form-process-add-item.php">
 
   <input type="hidden" id="add_item_noonce" name="add_item_noonce" value="<?= $_SESSION['add_item_noonce'];?>" />
   <input type="hidden" id="add_noonce_key" name="noonce_key" value="add_item_noonce" />
   <label for="item_title">Food</label>
-  <input type="text" required id="item_title" name="item_title" />
+  <input type="text" required id="item_title" name="post_title" />
   <label for="item_amount">Amount</label>
-  <INPUT type="text" id="item_amount" name="item_amount" />
+  <INPUT type="text" id="item_amount" name="post_amount" />
   <label for="item_description">Notes</label>
-  <textarea id="item_description" name="item_description"></textarea>
+  <textarea id="item_description" name="post_description"></textarea>
   <label for="item_date">When</label>
-  <input type="datetime-local" name="item_date" name="item_date"/>
+  <input type="datetime-local" id="item_date" name="post_date"/>
   <button type="submit">Add Item</button>
 
 </form>
 <?php
-
+die();
 
 
 $now = new DateTime();
