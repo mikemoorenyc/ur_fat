@@ -11,10 +11,10 @@ function get_posts($from,$to,$limit,$page,$user_id) {
  if($to) {
   $where_queries[] = "post_date <=".intval($to);
  }
- if($limit) {
+ if($limit && intval($limit) > 0) {
    $limit_query = "LIMIT ".intval($limit);
  }
- if($page) {
+ if($page && intval($page) > 0) {
    $offset_query = "OFFSET ".((intval($page) - 1) * intval($limit));
  }
 
