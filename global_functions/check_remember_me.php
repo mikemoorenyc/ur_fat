@@ -1,5 +1,5 @@
 <?php
-function check_remember_me() {
+function verify_remember_me() {
 
 }
 
