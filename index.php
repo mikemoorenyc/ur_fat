@@ -30,7 +30,7 @@ $_SESSION['add_item_noonce'] = generate_noonce();
 
 </form>
 <?php
-die();
+
 
 
 $now = new DateTime();
@@ -41,45 +41,9 @@ $now->modify(intval($_GET['offset']).' day');
 $startTime =  strtotime($now->format('Y-m-d 00:00:00 O'));
 $endTime = strtotime($now->format('Y-m-d 23:59:59 O'));
 
-$query = "SELECT * FROM posts WHERE post_date BETWEEN $startTime AND $endTime ORDER BY post_date DESC";
-$today_posts = mysqli_query($db_conn, $query);
-if($today_posts) {
-  while ($row = $today_posts->fetch_assoc()) {
-     $rows[] = $row;
-   }
-}
-if(!empty($rows)):?>
-<ul>
-<?php foreach($rows as $r):?>
-  <?php
-  $_SESSION['deltoken_'.$r['id']] = genToken();
-  $_SESSION['updatetoken_'.$r['id']] = genToken();
-  ?>
-  <li>
-    <h2><?= $r['post_title'];?></h2>
-    <form method="POST" action="delete-item.php">
-      <input type="hidden" name="delete_id" value="<?=$r['id'];?>" />
-      <input type="hidden"  name="noonce_key" value="deltoken_<?= $r['id'];?>" />
-      <input type="hidden"  name="<?='deltoken_'.$r['id'];?>" value="<?=$_SESSION['deltoken_'.$r['id']];?>" />
-      <button type="submit">Delete</button>
-    </form>
+$today_posts = get_posts($startTime, $endTime, get_user()['id']); 
 
-    <form method="POST" action="update-item.php">
-      <input type="hidden"  name="noonce_key" value="updatetoken_<?= $r['id'];?>" />
-      <input type="hidden" name="update_id" value="<?=$r['id'];?>" />
-      <input type="hidden"  name="<?='updatetoken_'.$r['id'];?>" value="<?=$_SESSION['updatetoken_'.$r['id']];?>" />
-      <input type='text' placeholder="Title" name="post_title" value="<?= $r['post_title'];?>" />
-      <input type='text' placeholder="Amount" name="post_amount" value="<?= $r['post_amount'];?>" />
-      <button type="submit">Save</button>
-    </form>
+var_dump($today_posts);
+die();
 
-  </li>
-
-
-<?php endforeach;?>
-
-</ul>
-
-
-
-<?php endif;?>
+?>
