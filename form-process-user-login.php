@@ -13,6 +13,7 @@ $_SESSION['current_user'] = null;
 if($logged_in_user) {
   $_SESSION['logged_in'] = true;
   $_SESSION['current_user'] = $logged_in_user;
+  create_remember_me($_SESSION['current_user']['id']);
   header("Location: index.php",TRUE,303);
 
 } else {
