@@ -1,6 +1,6 @@
 <?php
 
-function add_item($post_title,$post_description,$post_amount,$post_date,$post_author) {
+function add_item($post_title=null,$post_description=null,$post_amount=null,$post_date=null,$post_author=null) {
   global $db_conn;
   if(!$post_title || !$post_date || !$post_author) {
     return false;

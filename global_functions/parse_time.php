@@ -1,6 +1,6 @@
 <?php
 //READY TO GO
-function parse_time($date) {
+function parse_time($date=null) {
   if(!validate_date($date)) {
     return false;
   }

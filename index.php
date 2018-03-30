@@ -2,7 +2,6 @@
 
 require_once 'header.php';
 
-
 if(!is_user_logged_in()) {
   $index_URL  = (isset($_SERVER['HTTPS']) ? "https" : "http") . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
   $base = str_replace('index.php','',$index_URL);
@@ -41,9 +40,36 @@ $now->modify(intval($_GET['offset']).' day');
 $startTime =  strtotime($now->format('Y-m-d 00:00:00 O'));
 $endTime = strtotime($now->format('Y-m-d 23:59:59 O'));
 
-$today_posts = get_posts($startTime, $endTime, get_user()['id']); 
 
-var_dump($today_posts);
-die();
+
+$today_posts = get_posts($startTime, $endTime, get_user()['id']);
+
+
+
+foreach($today_posts as $t) {
+  ?>
+<div class="item">
+  <h2><?= $t['post_title'];?></h2>
+  <?php
+$_SESSION['update_'.$t['id']] = generate_noonce();
+   ?>
+   <form method="POST" action="form-process-update-item.php">
+     <input type="hidden" name="<?= 'update_'.$t['id'];?>" value="<?= $_SESSION['update_'.$t['id']];?>" />
+     <input type="hidden" name="id" value="<?= $t['id'];?>">
+     <input type="text" value="<?= $t['post_title'];?>" name="post_title" />
+     <button type="submit">Update Post</button>
+   </form>
+   <form method="POST" action="form-process-delete-item.php">
+     <?php $_SESSION['delete_'.$t['id']] = generate_noonce(); ?>
+     <input type="hidden" name="<?= 'delete_'.$t['id'];?>" value="<?= $_SESSION['delete_'.$t['id']];?>" />
+     <input type="hidden" name="id" value="<?= $t['id'];?>">
+     <button type="submit">Delete Post</button>
+   </form>
+</div>
+
+  <?php
+}
 
 ?>
+
+<a href="form-process-user-logout.php">Logout</a>

@@ -1,5 +1,5 @@
 <?php
-function get_post_by_id($id) {
+function get_post_by_id($id=null) {
   global $db_conn;
   if(!$id) {
     return false;

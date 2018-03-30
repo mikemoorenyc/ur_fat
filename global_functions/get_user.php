@@ -2,7 +2,7 @@
 function get_user($id=null, $email=null) {
   global $db_conn;
   $user_id = $id ?: $_SESSION['current_user']['id'];
-  if(!$id && !$email) {
+  if(!$user_id && !$email) {
     return false;
   }
   $get_user =  "SELECT id,email,reg_date FROM users WHERE `id` = '".mysql_real_escape_string($user_id)."' LIMIT 1";
