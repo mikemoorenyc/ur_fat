@@ -8,9 +8,8 @@ function logout_user($id=null) {
   }
   $_SESSION['logged_in'] = false;
   $_SESSION['current_user'] = null;
-  return delete_remember_me();
-  //DELETE TOKEN
-  return true;
+  $delete_remember_me = delete_remember_me();
+  return $delete_remember_me;
 
 }
 
