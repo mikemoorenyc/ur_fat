@@ -6,12 +6,13 @@ function delete_remember_me() {
    $sql =  "DELETE FROM tokens WHERE selector=".intval($credentials['selector']);
    $deleted_token =  mysqli_query($db_conn, $sql);
    if($deleted_token) {
+     setcookie("ur_fat_remember_me", "", time() - 3600,'/');
      return true;
-     unset($_COOKIE["ur_fat_remember_me"]);
+
    } else {
      return false;
    }
-   
+
 }
 
  ?>

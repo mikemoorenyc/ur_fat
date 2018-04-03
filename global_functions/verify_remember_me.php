@@ -31,6 +31,7 @@ function verify_remember_me() {
  }
  $hash_correct = hash_equals($db_token['hashedValidator'],hash('sha256', $credentials['validator'], true));
  if(!$hash_correct) {
+   delete_remember_me();
    return false;
  }
 

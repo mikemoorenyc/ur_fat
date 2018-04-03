@@ -4,9 +4,13 @@ function login_user($id=null) {
     return false;
   }
   $current_user = get_user($id);
-  $_SESSION['logged_in'] = true;
-  $_SESSION['current_user'] = $current_user;
-  return $current_user ;
+  if($current_user) {
+    $_SESSION['logged_in'] = true;
+    $_SESSION['current_user'] = $current_user;
+    return $current_user ;
+  }
+  return false;
+
 }
 
  ?>

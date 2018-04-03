@@ -7,6 +7,8 @@ include 'func_user_check.php';
 include 'func_request_check.php';
 include 'func_check_remember_me.php';
 */
+var_dump($_SESSION);
+var_dump($_COOKIE);
 require 'db_connect.php';
 $dir = new DirectoryIterator('global_functions');
 foreach ($dir as $i) {
