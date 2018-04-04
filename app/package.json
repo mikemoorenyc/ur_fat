@@ -1,8 +1,8 @@
 {
-  "name": "ur-fat",
+  "name": "ur-fat-frontend-application",
   "version": "1.0.0",
   "description": "ddd",
-  "main": "app.js",
+  "main": "index.html",
   "scripts": {
     "start": "webpack"
   },
