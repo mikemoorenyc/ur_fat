@@ -9,7 +9,9 @@ module.exports = {
   },
   plugins: [
         new HtmlWebpackPlugin({
-            hash: true
+            hash: true,
+            filename: '../../app.html',
+            template: './index.html'
         })
    ]
 }
