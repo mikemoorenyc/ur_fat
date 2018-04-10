@@ -1,3 +1,5 @@
+
+
 import Cookies from 'js-cookie';
 import { h, render, Component  } from 'preact';
 
@@ -18,7 +20,26 @@ class App extends Component {
       }
 
   }
-  
+  componentDidMount() {
+    this.loginListen = global.emitter.addListener('login-status',function(status,user){
+      if(status === 'logged_in') {
+        this.setState({
+          logged_in: true,
+          user: user
+        });
+        return null;
+      } 
+      this.setState({
+        logged_in: false,
+        user: null
+      });
+    }.bind(this));
+    
+  }
+  componentWillUnmount() {
+   this.loginListen.remove(); 
+    
+  }
 
   render(props, state) {
     let status = 'logged in';
