@@ -1,5 +1,7 @@
 import { h, render, Component  } from 'preact';
 import linkState from 'linkstate';
+import axios from 'axios';
+
 
 export default class LoginForm extends Component {
   constructor() {
@@ -11,6 +13,16 @@ export default class LoginForm extends Component {
   }
   submitForm(e) {
    e.preventDefault();
+	 axios.post('/api/login-user.php', {
+    email: this.state.email,
+    pass: this.state.pass
+  })
+  .then(function (response) {
+    console.log(response);
+  })
+  .catch(function (error) {
+    console.log(error);
+  });
    
   }
 
