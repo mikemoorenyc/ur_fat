@@ -1,5 +1,6 @@
 <?php
-
+require_once 'app.html';
+die();
 require_once 'header.php';
 
 if(!is_user_logged_in()) {
