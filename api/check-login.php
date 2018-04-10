@@ -10,7 +10,7 @@ if($logged_in) {
  die();
 }
 //NOT LOGGED IN
-http_response_code(401);
+http_response_code(200);
 $_SESSION['login_noonce'] = generate_noonce();
 $response['login_noonce'] = $_SESSION['login_noonce'];
 echo json_encode($response);
