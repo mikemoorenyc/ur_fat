@@ -1,6 +1,10 @@
 import Cookies from 'js-cookie';
 import { h, render, Component  } from 'preact';
 
+var {EventEmitter} = require('fbemitter');
+global.emitter = new EventEmitter();
+
+
 import LoginForm from './components/login-form';
 
 
@@ -14,7 +18,7 @@ class App extends Component {
       }
 
   }
-
+  
 
   render(props, state) {
     let status = 'logged in';
