@@ -9,11 +9,15 @@ export default class LoginForm extends Component {
       pass: ''
     }
   }
+  submitForm(e) {
+   e.preventDefault();
+   
+  }
 
 	render(props, state) {
-    console.log(global.eventer);
+
 		return (
-			<form>
+			<form onSubmit={this.submitForm}>
         <label>Email</label><br/>
         <input type="email" value={state.email}
 						onInput={linkState(this, 'email')} />
