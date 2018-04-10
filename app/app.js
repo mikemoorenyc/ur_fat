@@ -3,6 +3,8 @@
 import Cookies from 'js-cookie';
 import { h, render, Component  } from 'preact';
 
+import axios from "axios"; 
+
 var {EventEmitter} = require('fbemitter');
 global.emitter = new EventEmitter();
 
@@ -16,11 +18,20 @@ class App extends Component {
 
       this.state = {
         logged_in : false,
-        dog: props.dog
+        user: null,
+        checked: false
       }
 
   }
   componentDidMount() {
+    axios.get('/api/check-login.php')
+    .then(function (response) {
+      console.log(response);
+    })
+    .catch(function (error) {
+      console.log(error);
+    });
+
     this.loginListen = global.emitter.addListener('login-status',function(status,user){
       if(status === 'logged_in') {
         this.setState({
@@ -44,7 +55,7 @@ class App extends Component {
   render(props, state) {
     let status = 'logged in';
 
-    if(!state.logged_in) {
+    if(!state.logged_in && state.checked) {
       return (<LoginForm />);
     }
     return(
