@@ -10,7 +10,7 @@ global.emitter = new EventEmitter();
 
 
 import LoginForm from './components/login-form';
-import AddItemForm from './components/add-item-form';
+import ItemForm from './components/item-form';
 
 
 class App extends Component {
@@ -22,8 +22,11 @@ class App extends Component {
         user: null,
         checked_login: false,
         login_noonce: null,
-        day: 0
+        day: 0,
+        form_opened: false,
+        add_item_noonce: null
       }
+    this.newItem = this.newItem.bind(this);
 
   }
   componentDidMount() {
@@ -33,7 +36,8 @@ class App extends Component {
       this.setState({
         checked_login: true,
         logged_in: response.data.logged_in,
-        login_noonce: response.data.login_noonce
+        login_noonce: response.data.login_noonce,
+        add_item_noonce: response.data.add_item_noonce
       });
     }.bind(this))
     .catch(function (error) {
@@ -54,6 +58,16 @@ class App extends Component {
    this.loginListen.remove();
 
   }
+  newItem(e) {
+   e.preventDefault(); 
+   let item = {
+    id: null,
+    title: '',
+    amount: '',
+    notes: ''
+   }
+   global.emitter.emit('open-item-form', item,true);
+  }
 
   render(props, state) {
     let status = 'logged in';
@@ -63,9 +77,11 @@ class App extends Component {
     if(!state.logged_in ) {
       return (<LoginForm login_noonce={this.state.login_noonce}/>);
     }
+    
     return (
       <div>
-        <AddItemForm /> 
+        <button onClick={this.newItem}>New Item</button>
+        <ItemForm />
       </div>
     )
 
