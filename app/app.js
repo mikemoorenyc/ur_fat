@@ -66,7 +66,7 @@ class App extends Component {
     amount: '',
     notes: ''
    }
-   global.emitter.emit('open-item-form', item,true);
+   global.emitter.emit('open-item-form', item,"ADD");
   }
 
   render(props, state) {
