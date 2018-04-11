@@ -10,6 +10,7 @@ global.emitter = new EventEmitter();
 
 
 import LoginForm from './components/login-form';
+import AddItemForm from './components/add-item-form';
 
 
 class App extends Component {
@@ -64,7 +65,7 @@ class App extends Component {
     }
     return (
       <div>
-        <List day={state.day} />
+        <AddItemForm /> 
       </div>
     )
 
