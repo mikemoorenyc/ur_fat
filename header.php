@@ -7,10 +7,9 @@ include 'func_user_check.php';
 include 'func_request_check.php';
 include 'func_check_remember_me.php';
 */
-var_dump($_SESSION);
-var_dump($_COOKIE);
+
 require 'db_connect.php';
-$dir = new DirectoryIterator('global_functions');
+$dir = new DirectoryIterator(get_include_path().'global_functions');
 foreach ($dir as $i) {
     if($i->getExtension() !== 'php' || !$i->isFile()) {
      continue;

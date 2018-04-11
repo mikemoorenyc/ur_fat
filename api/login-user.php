@@ -1,46 +1,33 @@
 <?php
-require_once '../header.php';
+set_include_path('../');
+require 'header.php';
 
-if(check_user()) {
-  echo json_encode(array(
-    "logged_in" => true,
-    "id" => $_SESSION['current_user']
-  ));
+if($_SESSION['login_noonce'] !== $_POST['login_noonce']) {
+  http_response_code(401);
+  echo json_encode(array("error_msg" => "Bad Noonce"));
   die();
 }
-
-if(check_remember_me()) {
-  $_SESSION['logged_in'] = true;
-  $_SESSION['current_user'] = check_remember_me()['id'];
-  echo json_encode(array(
-    "logged_in" => true,
-    "id" => $_SESSION['current_user']
-  ));
+unset($_SESSION['login_noonce']);
+unset($_SESSION['login_alert']);
+$logged_in_user = verify_login($_POST['email'],$_POST['pass']);
+if($logged_in_user) {
+  $remember_me = create_remember_me($logged_in_user['id']);
+  $response = array(
+    'logged_in' => true,
+    'user' => get_user()
+  );
+  echo json_encode($response);
   die();
 }
-function badLoginResponse() {
-  http_response_code(400);
-  echo json_encode(array(
-    "logged_in" => false
-  ));
+if(!$logged_in_user) {
+  http_response_code(401);
+  $_SESSION['login_noonce'] = generate_noonce();
+  $response = array(
+    'logged_in' => false,
+    'login_noonce' => $_SESSION['login_noonce'],
+    'error_msg' => 'Incorrect email or password.'
+  );
+  echo json_encode($response);
   die();
 }
-if(!$_POST['email'] || $_POST['password']) {
-  badLoginResponse();
-}
-$login_check = verify_login();
-if(!$login_check) {
-  badLoginResponse();
-} else {
-  $_SESSION['logged_in'] = true;
-  $_SESSION['current_user'] = $login_check;
-  create_remember_me();
-  echo json_encode(array(
-    "logged_in" => true,
-    "id" => $_SESSION['current_user']
-  ));
-  die();
-}
-
-
  ?>

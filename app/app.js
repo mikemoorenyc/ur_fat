@@ -3,7 +3,7 @@
 import Cookies from 'js-cookie';
 import { h, render, Component  } from 'preact';
 
-import axios from "axios"; 
+import axios from "axios";
 
 var {EventEmitter} = require('fbemitter');
 global.emitter = new EventEmitter();
@@ -19,50 +19,55 @@ class App extends Component {
       this.state = {
         logged_in : false,
         user: null,
-        checked: false
+        checked_login: false,
+        login_noonce: null,
+        day: 0
       }
 
   }
   componentDidMount() {
-    axios.get('/api/check-login.php')
+    axios.get(window.location.pathname+'api/check-login.php')
     .then(function (response) {
-      console.log(response);
-    })
+
+      this.setState({
+        checked_login: true,
+        logged_in: response.data.logged_in,
+        login_noonce: response.data.login_noonce
+      });
+    }.bind(this))
     .catch(function (error) {
       console.log(error);
     });
 
-    this.loginListen = global.emitter.addListener('login-status',function(status,user){
-      if(status === 'logged_in') {
-        this.setState({
-          logged_in: true,
-          user: user
-        });
-        return null;
-      } 
-      this.setState({
-        logged_in: false,
-        user: null
-      });
-    }.bind(this));
-    
+    this.loginListen = global.emitter.addListener('login-status',function(status, user){
+      if(status) {
+        this.setState({logged_in: true});
+      }
+      if(user) {
+        this.setState({user:user});
+      }
+    }.bind(this))
+
   }
   componentWillUnmount() {
-   this.loginListen.remove(); 
-    
+   this.loginListen.remove();
+
   }
 
   render(props, state) {
     let status = 'logged in';
-
-    if(!state.logged_in && state.checked) {
-      return (<LoginForm />);
+    if( !state.checked_login) {
+      return (<div>Loggin you in</div>);
     }
-    return(
+    if(!state.logged_in ) {
+      return (<LoginForm login_noonce={this.state.login_noonce}/>);
+    }
+    return (
       <div>
-      {status}
+        <List day={state.day} />
       </div>
     )
+
   }
 }
 

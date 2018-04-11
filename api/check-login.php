@@ -1,5 +1,6 @@
 <?php
-require '../header.php';
+set_include_path('../');
+require 'header.php';
 $response = array();
 $logged_in = is_user_logged_in();
 $response['logged_in'] = $logged_in;
