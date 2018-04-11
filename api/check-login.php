@@ -28,6 +28,8 @@ $startTime =  strtotime($now->format('Y-m-d 00:00:00 O'));
 $endTime = strtotime($now->format('Y-m-d 23:59:59 O'));
 $response['today_posts'] = get_posts($startTime, $endTime, get_user()['id']);
 
+ $_SESSION['add_item_noonce'] = generate_noonce();
+ $response['add_item_noonce'] = $_SESSION['add_item_noonce'];
 
 echo json_encode($response);
 die();
