@@ -38,9 +38,14 @@ export default class ItemForm extends Component {
    if(!state.opened) {
     return null; 
    }
+   let submitText = "Add";
+   if(state.method === "UPDATE") {
+     submitText = "Save";
+   }
    <div>
       
-      <button>Cancel</button>   
+      <button onClick={this.resetForm}>Cancel</button>   
+      <button>{submitText}</button>
    </div>
     
     
