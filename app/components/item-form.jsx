@@ -12,46 +12,82 @@ export default class ItemForm extends Component {
      method: null
     }
     this.resetForm = this.resetForm.bind(this);
+    this.submitForm = this.submitForm.bind(this);
   }
-  
+
   componentDidMount() {
+
     this.openItemListener = global.emitter.addListener('open-item-form',function(item, method){
+
       this.setState({
-        item: item,
+        title: item.title,
+        amount: item.amount,
+        notes: item.notes,
         method: method,
+        id: item.id,
         opened: true
       });
     }.bind(this))
-    
+
   }
   componentWillUnmount() {
    this.openItemListener.remove();
   }
-  resetForm() {
+  resetForm(e) {
+  e.preventDefault();
    this.setState({
-    item: {},
+    title: '',
+    amount: '',
+    notes: '',
+    id: null,
     method: null,
     opened: false
-   }); 
+   });
+  }
+  submitForm(e) {
+    e.preventDefault();
+    let endpoint = "add-item";
+    if(this.state.method === "UPDATE") {
+      endpoint = 'update-item';
+    }
+    let item = {
+      id: this.state.id,
+      post_title: this.state.title,
+      post_date: Date.now()
+    }
+    global.emitter.emit(endpoint, item);
+    this.resetForm(e);
+
   }
   render(props,state) {
+
    if(!state.opened) {
-    return null; 
+    return null;
    }
+
    let submitText = "Add";
    if(state.method === "UPDATE") {
      submitText = "Save";
    }
-   <div>
-      
-      <button onClick={this.resetForm}>Cancel</button>   
-      <button>{submitText}</button>
-   </div>
-    
-    
+   let disabled = false;
+   if(state.title.length < 1) {
+      disabled = true;
+   }
+   return (
+     <form onSubmit={this.submitForm}>
+        <label>Title</label><br/>
+        <input type="text" value={state.title} onInput={linkState(this, 'title')} required />
+
+
+        <button type="reset" onClick={this.resetForm}>Cancel</button>
+        <button disabled={disabled} type="submit">{submitText}</button>
+     </form>
+   )
+
+
   }
-  
-  
-  
-  
+
+
+
+
 }
