@@ -4,19 +4,19 @@ require 'header.php';
 
 function badRequest($code=400) {
   http_response_code($code);
-  $_SESSION['delete_'.$_POST['id'].'_noonce'] = generate_noonce();
+  $_SESSION['edit_'.$_POST['id'].'_noonce'] = generate_noonce();
   $response = array(
-    'noonce' => $_SESSION['delete_'.$_POST['id'].'_noonce'] ,
+    'noonce' => $_SESSION['edit_'.$_POST['id'].'_noonce'] ,
     'local_id' => $_POST['id']
   );
   echo json_encode($response);
   die();
 }
 
-if($_SESSION['delete_'.$_POST['id'].'_noonce'] !== $_POST['delete_noonce'] || !is_user_logged_in()) {
+if($_SESSION['edit_'.$_POST['id'].'_noonce'] !== $_POST['delete_noonce'] || !is_user_logged_in()) {
   badRequest();
 }
-unset($_SESSION['delete_'.$_POST['id'].'_noonce']);
+unset($_SESSION['edit_'.$_POST['id'].'_noonce']);
 $post = get_post_by_id($_POST['id']);
 
 if($post['author'] !== get_user()['id']) {
