@@ -1,18 +1,11 @@
-import { h, render, Component  } from 'preact';
+import { h, render } from 'preact';
 import linkState from 'linkstate';
 
 import DeleteBtn from '../components/DeleteBtn.js';
 import UpdateBtn from '../components/UpdateBtn.js';
 
-export default class List extends Component {
-  constructor(props) {
-    super();
-
-  }
-
-
-  render(props,state) {
-    if(!props.today_posts.length) {
+export default function List(props) {
+  if(!props.today_posts.length) {
       return false;
     }
 
@@ -31,5 +24,6 @@ export default class List extends Component {
       {items}
       </div>
     )
-  }
+  
 }
+
