@@ -59,6 +59,53 @@ class App extends Component {
     }.bind(this));
 
     this.updateListen = global.emitter.addListener('update-item',function(item){
+      let formdata = newFormData();
+      formdata.set('id',item.id);
+      formdata.set('update_noonce',this.state.edit_noonces['item_'+item.id]);
+      formdata.set('post_title',item.post_title);
+      let update_key = this.state.today_posts.findIndex(function(e){
+        return parseInt(e.id) === parseInt(item.id);
+      });
+      let old_post = this.state.today_posts['update_key'];
+      let updated_posts = this.state.today_posts.slice();
+      updated_posts[update_key] = item;
+      this.setState({today_posts : updated_posts});
+      
+      axios({
+        method: 'post',
+        url: window.location.pathname+'api/update-item.php',
+        config: { headers: {'Content-Type': 'multipart/form-data' }},
+        data: formdata
+      })
+      .then(function (response) {
+        let newNoonces = this.state.edit_noonces.slice();
+        newNoonces['item_'+id] = response.data.noonce;
+        this.setState({edit_noonces: newNoonces});
+        let newItem = response.data.item;
+        
+        let update_posts = this.state.today_posts.slice();
+        let update_key = update_posts.findIndex(function(e){
+          return parseInt(e.id) === parseInt(newItem.id);
+        });
+        update_posts[update_key] = newItem;
+        this.setState({today_posts: update_key}});
+        
+        return false;
+      }.bind(this))
+      .catch(function (error) {
+        let newNoonces = this.state.edit_noonces.slice();
+        newNoonces['item_'+id] = error.response.data.noonce;
+        this.setState({edit_noonces: newNoonces});
+        
+        let remove_update = this.state.today_posts.slice();
+        let remove_key = remove_update.findIndex(function(e){
+          return parseInt(e.id) === parseInt(old_post.id);
+        });
+        remove_update[remove_key] = old_post;
+        this.setState({today_posts: remove_update});
+        
+        return false;
+      }.bind(this));
 
     }.bind(this))
 
@@ -153,6 +200,7 @@ class App extends Component {
    this.loginListen.remove();
    this.newItemListen.remove();
    this.deleteListen.remove();
+   this.updateListen.remove();
   }
   newItem(e) {
    e.preventDefault();
