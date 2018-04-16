@@ -27,10 +27,10 @@ $now->setTimezone($ny_time);
 $startTime =  strtotime($now->format('Y-m-d 00:00:00 O'));
 $endTime = strtotime($now->format('Y-m-d 23:59:59 O'));
 $response['today_posts'] = get_posts($startTime, $endTime, get_user()['id']);
-
+$response['edit_noonces'] = array();
 foreach($response['today_posts'] as $k => $p) {
-  $_SESSION['delete_'.$p['id'].'_noonce'] = generate_noonce();
-  $response['today_posts'][$k]['delete_noonce'] = $_SESSION['delete_'.$p['id'].'_noonce'];
+  $_SESSION['edit_'.$p['id'].'_noonce'] = generate_noonce();
+  $response['edit_noonces']['item_'.$p['id']] = $_SESSION['edit_'.$p['id'].'_noonce'];
 }
 
  $_SESSION['add_item_noonce'] = generate_noonce();

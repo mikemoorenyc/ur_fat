@@ -25,7 +25,8 @@ class App extends Component {
         day: 0,
         form_opened: false,
         add_item_noonce: null,
-        today_posts: []
+        today_posts: [],
+        edit_noonces: []
       }
     this.newItem = this.newItem.bind(this);
 
@@ -40,7 +41,8 @@ class App extends Component {
         logged_in: response.data.logged_in,
         login_noonce: response.data.login_noonce,
         add_item_noonce: response.data.add_item_noonce,
-        today_posts: response.data.today_posts
+        today_posts: response.data.today_posts,
+        edit_noonces: response.data.edit_noonces
       });
     }.bind(this))
     .catch(function (error) {
@@ -54,12 +56,16 @@ class App extends Component {
       if(user) {
         this.setState({user:user});
       }
+    }.bind(this));
+
+    this.updateListen = global.emitter.addListener('update-item',function(item){
+
     }.bind(this))
 
     this.deleteListen = global.emitter.addListener('delete-item',function(id,noonce){
       let formdata = new FormData();
       formdata.set('id',id);
-      formdata.set('delete_noonce',noonce);
+      formdata.set('delete_noonce',this.state.edit_noonces['item_'+id]);
       let del_key = this.state.today_posts.findIndex(function(e) {
           return parseInt(e.id) === parseInt(id);
       });
@@ -78,6 +84,9 @@ class App extends Component {
         return false;
       }.bind(this))
       .catch(function (error) {
+        let newNoonces = this.state.edit_noonces.slice();
+        newNoonces['item_'+id] = error.response.data.noonce;
+        this.setState({edit_noonces: newNoonces});
         updated_posts.push(del_item);
 
         updated_posts.sort(function(a,b){
@@ -143,13 +152,14 @@ class App extends Component {
   componentWillUnmount() {
    this.loginListen.remove();
    this.newItemListen.remove();
+   this.deleteListen.remove();
   }
   newItem(e) {
    e.preventDefault();
 
    let item = {
     id: Date.now(),
-    title: '',
+    post_title: '',
     amount: '',
     notes: ''
    }

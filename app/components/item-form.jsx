@@ -20,12 +20,13 @@ export default class ItemForm extends Component {
     this.openItemListener = global.emitter.addListener('open-item-form',function(item, method){
 
       this.setState({
-        title: item.title,
+        title: item.post_title,
         amount: item.amount,
         notes: item.notes,
         method: method,
         id: item.id,
-        opened: true
+        opened: true,
+        noonce: item.noonce
       });
     }.bind(this))
 
@@ -41,7 +42,8 @@ export default class ItemForm extends Component {
     notes: '',
     id: null,
     method: null,
-    opened: false
+    opened: false,
+    noonce: null
    });
   }
   submitForm(e) {
@@ -53,7 +55,8 @@ export default class ItemForm extends Component {
     let item = {
       id: this.state.id,
       post_title: this.state.title,
-      post_date: Date.now()
+      post_date: Date.now(),
+      noonce: this.state.noonce
     }
     global.emitter.emit(endpoint, item);
     this.resetForm(e);
@@ -74,7 +77,7 @@ export default class ItemForm extends Component {
       disabled = true;
    }
    return (
-     <form onSubmit={this.submitForm}>
+     <form onSubmit={this.submitForm} style={{position:"absolute", background:"white", left: 0, right:0, bottom:0, top:0}}>
         <label>Title</label><br/>
         <input type="text" value={state.title} onInput={linkState(this, 'title')} required />
 

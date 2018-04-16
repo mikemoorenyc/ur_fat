@@ -8,8 +8,8 @@ export default class DeleteBtn extends Component {
   }
   deleteClick(e) {
     e.preventDefault();
-    console.log(this.props.id);
-    global.emitter.emit('delete-item', this.props.id, this.props.noonce);
+
+    global.emitter.emit('delete-item', this.props.id);
   }
 
   render(props,state) {

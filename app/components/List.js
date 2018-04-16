@@ -2,7 +2,7 @@ import { h, render, Component  } from 'preact';
 import linkState from 'linkstate';
 
 import DeleteBtn from '../components/DeleteBtn.js';
-
+import UpdateBtn from '../components/UpdateBtn.js';
 
 export default class List extends Component {
   constructor(props) {
@@ -21,7 +21,7 @@ export default class List extends Component {
 
         <div className="item" key={e.id} data-id={e.id}>{e.post_title} <b>{e.id}</b>
           <br/>
-          <DeleteBtn id={e.id} noonce={e.delete_noonce} />
+          <UpdateBtn item={e} /><DeleteBtn id={e.id}  />
           <br/><br/>
         </div>
       );

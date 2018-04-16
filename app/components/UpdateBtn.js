@@ -9,12 +9,13 @@ export default class UpdateBtn extends Component {
   UpdateClick(e) {
     e.preventDefault();
 
-    global.emitter.emit('update-item', this.props.id, this.props.noonce);
+  
+    global.emitter.emit('open-item-form',this.props.item, "UPDATE")
   }
 
   render(props,state) {
     return (
-      <button onClick={this.UpdateClick}>Update {props.id}</button>
+      <button onClick={this.UpdateClick}>Update {props.item.id}</button>
 
     )
   }
