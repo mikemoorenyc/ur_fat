@@ -32,9 +32,11 @@ if(!$item) {
   badRequest(500);
 }
 $_SESSION['add_item_noonce'] = generate_noonce();
+$_SESSION['edit_'.$item['id'].'_noonce'] = generate_noonce();
 $response = array(
   "new_item" => $item,
   'add_item_noonce' => $_SESSION['add_item_noonce'],
+  "noonce" => $_SESSION['edit_'.$item['id'].'_noonce'],
   'local_id' => $_POST['local_id']
 );
 

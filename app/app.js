@@ -13,6 +13,9 @@ import LoginForm from './components/login-form';
 import ItemForm from './components/item-form.jsx';
 import List from './components/List.js';
 
+import updateNoonces from './utils/update-noonce.js';
+import { removeItem, addItem, replaceItem } from './utils/list-operations.js';
+
 class App extends Component {
   constructor(props) {
       super();
@@ -59,7 +62,7 @@ class App extends Component {
     }.bind(this));
 
     this.updateListen = global.emitter.addListener('update-item',function(item){
-      let formdata = newFormData();
+      let formdata = new FormData();
       formdata.set('id',item.id);
       formdata.set('update_noonce',this.state.edit_noonces['item_'+item.id]);
       formdata.set('post_title',item.post_title);
@@ -67,10 +70,8 @@ class App extends Component {
         return parseInt(e.id) === parseInt(item.id);
       });
       let old_post = this.state.today_posts['update_key'];
-      let updated_posts = this.state.today_posts.slice();
-      updated_posts[update_key] = item;
-      this.setState({today_posts : updated_posts});
-      
+      this.setState({today_posts : replaceItem(this.state.today_posts,item.id,item)});
+
       axios({
         method: 'post',
         url: window.location.pathname+'api/update-item.php',
@@ -78,32 +79,24 @@ class App extends Component {
         data: formdata
       })
       .then(function (response) {
-        let newNoonces = this.state.edit_noonces.slice();
-        newNoonces['item_'+id] = response.data.noonce;
-        this.setState({edit_noonces: newNoonces});
+
         let newItem = response.data.item;
-        
-        let update_posts = this.state.today_posts.slice();
-        let update_key = update_posts.findIndex(function(e){
-          return parseInt(e.id) === parseInt(newItem.id);
+
+        this.setState({
+          today_posts: replaceItem(this.state.today_posts, newItem.id,newItem),
+          edit_noonces: updateNoonces(this.state.edit_noonces,response.data.noonce,newItem.id)
         });
-        update_posts[update_key] = newItem;
-        this.setState({today_posts: update_key}});
-        
+
         return false;
       }.bind(this))
       .catch(function (error) {
-        let newNoonces = this.state.edit_noonces.slice();
-        newNoonces['item_'+id] = error.response.data.noonce;
-        this.setState({edit_noonces: newNoonces});
-        
-        let remove_update = this.state.today_posts.slice();
-        let remove_key = remove_update.findIndex(function(e){
-          return parseInt(e.id) === parseInt(old_post.id);
+
+
+        this.setState({
+          today_posts: replaceItem(this.state.today_posts,old_post.id,old_post),
+          edit_noonces: updateNoonces(this.state.edit_noonces,error.response.data.noonce,old_post.id)
         });
-        remove_update[remove_key] = old_post;
-        this.setState({today_posts: remove_update});
-        
+
         return false;
       }.bind(this));
 
@@ -117,10 +110,8 @@ class App extends Component {
           return parseInt(e.id) === parseInt(id);
       });
       let del_item = this.state.today_posts[del_key];
-      let updated_posts = this.state.today_posts.filter(function(e,i){
-        return parseInt(e.id) !== parseInt(id);
-      });
-      this.setState({today_posts: updated_posts});
+
+      this.setState({today_posts: removeItem(this.state.today_posts, id)});
       axios({
         method: 'post',
         url: window.location.pathname+'api/delete-item.php',
@@ -131,16 +122,12 @@ class App extends Component {
         return false;
       }.bind(this))
       .catch(function (error) {
-        let newNoonces = this.state.edit_noonces.slice();
-        newNoonces['item_'+id] = error.response.data.noonce;
-        this.setState({edit_noonces: newNoonces});
-        updated_posts.push(del_item);
 
-        updated_posts.sort(function(a,b){
-          return a.post_date - b.post_date;
+        this.setState({
+          edit_noonces: updateNoonces(this.state.edit_noonces, error.response.data.noonce),
+          today_posts: addItem(this.state.today_posts,del_item)
         });
-        updated_posts.reverse();
-        this.setState({today_posts: updated_posts});
+
         return false;
       }.bind(this));
       return false;
@@ -152,19 +139,10 @@ class App extends Component {
       formdata.set('local_id',item.id);
       formdata.set('add_item_noonce',this.state.add_item_noonce);
       //ADD LOCALLY
-      let newItems = this.state.today_posts.slice();
       var local_id = item.id;
-      newItems.push(item);
-
-      newItems.sort(function(a,b){
-        return a.post_date - b.post_date;
-      });
-      newItems.reverse();
-
       this.setState({
-        today_posts: newItems
+        today_posts: addItem(this.state.today_posts,item)
       });
-
 
       axios({
         method: 'post',
@@ -173,25 +151,23 @@ class App extends Component {
         data: formdata
       })
       .then(function (response) {
-        let updatePosts = this.state.today_posts.slice();
-        var replace_index = updatePosts.findIndex(function(e) {
-            return parseInt(e.id) === parseInt(local_id);
-        });
-        updatePosts[replace_index] = response.data.new_item;
+        let d = response.data;
         this.setState({
-          today_posts: updatePosts,
-          add_item_noonce: response.data.add_item_noonce
-        });
+          today_posts: replaceItem(this.state.today_posts,local_id,d.new_item),
+          add_item_noonce: d.add_item_noonce,
+          edit_noonces: updateNoonces(this.state.edit_noonces,d.noonce,d.new_item.id)
+        })
+
         return false;
       }.bind(this))
       .catch(function (error) {
-        let updatePosts = this.state.today_posts.filter(function(e,i){
-          return parseInt(e.id) !== parseInt(local_id);
-        });
+        console.log(error);
+
         this.setState({
-          today_posts : updatePosts,
+          today_posts : removeItem(this.state.today_posts, local_id),
           add_item_noonce: error.response.data.add_item_noonce
         })
+        return false;
       }.bind(this));
     }.bind(this))
 
