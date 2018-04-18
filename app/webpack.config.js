@@ -1,6 +1,6 @@
 
 var HtmlWebpackPlugin = require('html-webpack-plugin');
-
+var ExtractTextPlugin = require('extract-text-webpack-plugin');
 module.exports = {
   entry: "./app.js",//path relative to this file
   output: {
@@ -22,14 +22,26 @@ module.exports = {
 						['transform-react-jsx', { pragma: 'h' }]
 					]
 				}
+			},
+      {
+        test:/\.(s*)css$/,
+        use: ExtractTextPlugin.extract({
+          fallback: "style-loader",
+          use: ['css-loader', 'sass-loader']
+        })
+
 			}
+
 		]
 	},
   plugins: [
+        new ExtractTextPlugin("styles.css"),
         new HtmlWebpackPlugin({
             hash: true,
             filename: '../../app.html',
             template: './index.html'
-        })
+        }),
+
+
    ]
 }

@@ -8,6 +8,7 @@ import axios from "axios";
 var {EventEmitter} = require('fbemitter');
 global.emitter = new EventEmitter();
 
+import './styles/app.scss';
 
 import LoginForm from './components/login-form';
 import ItemForm from './components/item-form.jsx';
@@ -32,10 +33,18 @@ class App extends Component {
         edit_noonces: []
       }
     this.newItem = this.newItem.bind(this);
-
+    this.logout = this.logout.bind(this);
+    this.checkLogin = this.checkLogin.bind(this)
   }
-  componentDidMount() {
-
+  logout(e) {
+    e.preventDefault();
+    if(!confirm("Are you sure you want to log out? ")) {
+      return false;
+    }
+    let current = window.location.href;
+    window.location.href = current+'form-process-user-logout.php?re='+current;
+  }
+  checkLogin() {
     axios.get(window.location.pathname+'api/check-login.php')
     .then(function (response) {
 
@@ -43,18 +52,27 @@ class App extends Component {
         checked_login: true,
         logged_in: response.data.logged_in,
         login_noonce: response.data.login_noonce,
-        add_item_noonce: response.data.add_item_noonce,
-        today_posts: response.data.today_posts,
-        edit_noonces: response.data.edit_noonces
       });
+      if(response.data.logged_in) {
+        this.setState({
+          add_item_noonce: response.data.add_item_noonce,
+          today_posts: response.data.today_posts,
+          edit_noonces: response.data.edit_noonces
+        });
+      }
     }.bind(this))
     .catch(function (error) {
       console.log(error);
     });
 
+  }
+  componentDidMount() {
+    this.checkLogin();
+
     this.loginListen = global.emitter.addListener('login-status',function(status, user){
       if(status) {
-        this.setState({logged_in: true});
+        this.setState({logged_in: true, checked_login: false});
+        this.checkLogin();
       }
       if(user) {
         this.setState({user:user});
@@ -201,10 +219,19 @@ class App extends Component {
 
     return (
       <div>
-        <button onClick={this.newItem}>New Item</button>
-        <List
-        today_posts={state.today_posts}
-        />
+        <div id="main-view">
+          <header><h2>What You Ate Today</h2></header>
+          <List
+          today_posts={state.today_posts}
+          />
+          <div className="bottom-bar">
+            <button onClick={this.newItem}>New Item</button>
+            <button onClick={this.logout}>Logout</button>
+          </div>
+        </div>
+
+
+
         <ItemForm />
       </div>
     )

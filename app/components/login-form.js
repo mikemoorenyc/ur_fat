@@ -36,13 +36,15 @@ export default class LoginForm extends Component {
       data: formdata
     })
     .then(function (response) {
-      console.log(response.data);
+
+      console.log(response);
       if(response.data.logged_in) {
         global.emitter.emit('login-status', true, response.data.user);
       }
       return false;
     }.bind(this))
     .catch(function (error) {
+      console.log(error);
       this.setState({
         checking: false,
         error: error.response.data.error_msg,
