@@ -14,15 +14,19 @@ function removeItem(old_list, id) {
   });
 }
 
-function addItem(old_list, item) {
+function addItem(old_list, item, top_threshold, bottom_threshold) {
   let newItems = old_list.slice();
+  newItems = sorter(newItems);
+  if(item.post_date > top_threshold || item.post_date < bottom_threshold) {
+   return newItems; 
+  }
   newItems.push(item);
   return sorter(newItems);
 }
 
 
 
-function replaceItem(old_list, id, item) {
+function replaceItem(old_list, id, item, top_threshold, bottom_threshold) {
   let updatePosts = old_list.slice();
   var replace_index = updatePosts.findIndex(function(e) {
       return parseInt(e.id) === parseInt(id);
@@ -31,6 +35,9 @@ function replaceItem(old_list, id, item) {
     return sorter(updatePosts);
   }
   updatePosts[replace_index] = item;
+  if(item.post_date > top_threshold || item.post_date < bottom_threshold) {
+   return removeItem(updatePosts,item.id); 
+  }
   return sorter(updatePosts);
 }
 
