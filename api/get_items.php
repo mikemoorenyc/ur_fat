@@ -19,6 +19,9 @@ $today_posts = get_posts($startTime, $endTime, get_user()['id']);
 
 $response = array();
 
+$response['top_threshold'] = $endTime;
+$response['bottom_threshold'] = $startTime;
+
 $response['offset'] = $offset;
 $response['items'] = $today_posts;
 
