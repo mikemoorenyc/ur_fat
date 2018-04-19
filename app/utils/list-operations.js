@@ -1,5 +1,8 @@
-function sorter(list) {
+function sorter(list,top,bottom) {
   let newItems = list.slice();
+  newItems = newItems.filter(function(e){
+    return e.post_date <= top && e.post_date >= bottom;
+  });
   newItems.sort(function(a,b){
     return a.post_date - b.post_date;
   });
@@ -16,12 +19,8 @@ function removeItem(old_list, id) {
 
 function addItem(old_list, item, top_threshold, bottom_threshold) {
   let newItems = old_list.slice();
-  newItems = sorter(newItems);
-  if(item.post_date > top_threshold || item.post_date < bottom_threshold) {
-   return newItems; 
-  }
   newItems.push(item);
-  return sorter(newItems);
+  return sorter(newItems,top_threshold,bottom_threshold);
 }
 
 
@@ -32,13 +31,11 @@ function replaceItem(old_list, id, item, top_threshold, bottom_threshold) {
       return parseInt(e.id) === parseInt(id);
   });
   if(replace_index < 0) {
-    return sorter(updatePosts);
+    return sorter(updatePosts,top_threshold,bottom_threshold);
   }
   updatePosts[replace_index] = item;
-  if(item.post_date > top_threshold || item.post_date < bottom_threshold) {
-   return removeItem(updatePosts,item.id); 
-  }
-  return sorter(updatePosts);
+  
+  return sorter(updatePosts,top_threshold,bottom_threshold);
 }
 
 
