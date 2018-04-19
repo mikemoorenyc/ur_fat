@@ -25,5 +25,11 @@ $response['bottom_threshold'] = $startTime;
 $response['offset'] = $offset;
 $response['items'] = $today_posts;
 
+$response['edit_noonces'] = array();
+foreach($response['today_posts'] as $k => $p) {
+  $_SESSION['edit_'.$p['id'].'_noonce'] = generate_noonce();
+  $response['edit_noonces']['item_'.$p['id']] = $_SESSION['edit_'.$p['id'].'_noonce'];
+}
+
 echo json_encode($response);
 die();
