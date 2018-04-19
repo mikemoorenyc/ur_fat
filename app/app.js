@@ -45,13 +45,16 @@ class App extends Component {
         day: 0,
         form_opened: false,
         add_item_noonce: null,
-        fetching_posts: false,
+        fetching_posts: true,
         today_posts: [],
-        edit_noonces: []
+        edit_noonces: [],
+        top_threshold: null,
+        bottom_threshold: null
       }
     this.newItem = this.newItem.bind(this);
     this.logout = this.logout.bind(this);
     this.checkLogin = this.checkLogin.bind(this)
+    this.getItems = this.getItems.bind(this);
   }
   logout(e) {
     e.preventDefault();
@@ -60,6 +63,22 @@ class App extends Component {
     }
     let current = window.location.href;
     window.location.href = current+'form-process-user-logout.php?re='+current;
+  }
+  getItems() {
+    axios.get(window.location.pathname+'api/get-items.php')
+    .then(function (response) {
+      let d = response.data;
+      this.setState({
+        today_posts: d.items,
+        bottom_threshold: d.bottom_threshold,
+        top_threshold: d.top_threshold,
+        fetching_posts: false;
+      })
+      .catch(function (error) {
+        
+      });
+      
+    }.bind(this))
   }
   checkLogin() {
     axios.get(window.location.pathname+'api/check-login.php')
@@ -84,6 +103,8 @@ class App extends Component {
   componentDidMount() {
     if(this.state.logged_in) {
       this.checkLogin();
+      /*if not logged in, will do nothing*/
+      this.getItems();
     }
     //this.checkLogin();
 
@@ -91,7 +112,9 @@ class App extends Component {
       console.log(status);
       if(status) {
         this.setState({logged_in: true, checked_login: true});
+        /*To GET ADD ITEM NOONCE*/
         this.checkLogin();
+        this.getItems();
       }
       if(user) {
         this.setState({user:user});
@@ -237,7 +260,10 @@ class App extends Component {
     }
     return (
       <div>
-      Logged in and ready<br/>
+      <List
+      fetching_posts={state.fetching_posts}
+      today_posts={state.today_posts}
+      />
       <button disabled={disableAdd} onClick={this.newItem}>New Item</button>
       <button onClick={this.logout}>Logout</button>
       </div>
