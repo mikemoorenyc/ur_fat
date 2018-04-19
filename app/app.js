@@ -1,17 +1,4 @@
-/*
-check if previous login cookie
-|               |
-Yes             NO --- Show login form --- verify login
-|                                               |
-check login / show cached items                 show blank list / get get new set of items
-|         |
-Yes       NO --- Reset & show login
-|
-Get new set of items
 
-
-
-*/
 
 import Cookies from 'js-cookie';
 import { h, render, Component  } from 'preact';
@@ -37,6 +24,10 @@ class App extends Component {
       if(props.previousLogin) {
         logged_in = true;
       }
+      let start = new Date();
+      start.setHours(0,0,0,0);
+      let end = new Date();
+      end.setHours(23,59,59,999);
       this.state = {
         logged_in : logged_in,
         user: null,
@@ -48,8 +39,8 @@ class App extends Component {
         fetching_posts: true,
         today_posts: [],
         edit_noonces: [],
-        top_threshold: null,
-        bottom_threshold: null
+        top_threshold: Math.floor(end.getTime() / 1000),
+        bottom_threshold: Math.floor(start.getTime() / 1000)
       }
     this.newItem = this.newItem.bind(this);
     this.logout = this.logout.bind(this);
@@ -301,4 +292,6 @@ class App extends Component {
   }
 }
 
-render(<App previousLogin={Cookies.get('ur_fat_remember_me')} />, document.getElementById('app'));
+render(<App 
+
+       previousLogin={Cookies.get('ur_fat_remember_me')} />, document.getElementById('app'));
