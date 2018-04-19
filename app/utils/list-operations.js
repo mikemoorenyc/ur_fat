@@ -1,4 +1,4 @@
-function sorter(list,top,bottom) {
+function sorter(list,top=9999999999,bottom=0) {
   let newItems = list.slice();
   newItems = newItems.filter(function(e){
     return e.post_date <= top && e.post_date >= bottom;
