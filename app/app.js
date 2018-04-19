@@ -63,7 +63,8 @@ class App extends Component {
         today_posts: d.items,
         bottom_threshold: d.bottom_threshold,
         top_threshold: d.top_threshold,
-        fetching_posts: false;
+        fetching_posts: false,
+        edit_noonces: d.edit_noonces
       })
       .catch(function (error) {
         
