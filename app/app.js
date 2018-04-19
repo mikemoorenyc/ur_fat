@@ -1,4 +1,17 @@
+/*
+check if previous login cookie
+|               |
+Yes             NO --- Show login form --- verify login
+|                                               |
+check login / show cached items                 show blank list / get get new set of items
+|         |
+Yes       NO --- Reset & show login
+|
+Get new set of items
 
+
+
+*/
 
 import Cookies from 'js-cookie';
 import { h, render, Component  } from 'preact';
@@ -20,15 +33,19 @@ import { removeItem, addItem, replaceItem } from './utils/list-operations.js';
 class App extends Component {
   constructor(props) {
       super();
-
+      let logged_in = false;
+      if(props.previousLogin) {
+        logged_in = true;
+      }
       this.state = {
-        logged_in : false,
+        logged_in : logged_in,
         user: null,
         checked_login: false,
         login_noonce: null,
         day: 0,
         form_opened: false,
         add_item_noonce: null,
+        fetching_posts: false,
         today_posts: [],
         edit_noonces: []
       }
@@ -55,9 +72,7 @@ class App extends Component {
       });
       if(response.data.logged_in) {
         this.setState({
-          add_item_noonce: response.data.add_item_noonce,
-          today_posts: response.data.today_posts,
-          edit_noonces: response.data.edit_noonces
+          add_item_noonce: response.data.add_item_noonce
         });
       }
     }.bind(this))
@@ -67,11 +82,15 @@ class App extends Component {
 
   }
   componentDidMount() {
-    this.checkLogin();
+    if(this.state.logged_in) {
+      this.checkLogin();
+    }
+    //this.checkLogin();
 
     this.loginListen = global.emitter.addListener('login-status',function(status, user){
+      console.log(status);
       if(status) {
-        this.setState({logged_in: true, checked_login: false});
+        this.setState({logged_in: true, checked_login: true});
         this.checkLogin();
       }
       if(user) {
@@ -209,6 +228,21 @@ class App extends Component {
   }
 
   render(props, state) {
+    let disableAdd = false
+    if(!state.add_item_noonce) {
+       disableAdd = true;
+    }
+    if( ( !state.logged_in)) {
+      return <LoginForm />;
+    }
+    return (
+      <div>
+      Logged in and ready<br/>
+      <button disabled={disableAdd} onClick={this.newItem}>New Item</button>
+      <button onClick={this.logout}>Logout</button>
+      </div>
+    )
+    /*
     let status = 'logged in';
     if( !state.checked_login) {
       return (<div>Loggin you in</div>);
@@ -234,9 +268,11 @@ class App extends Component {
 
         <ItemForm />
       </div>
+
     )
+    */
 
   }
 }
 
-render(<App dog={"house"} />, document.getElementById('app'));
+render(<App previousLogin={Cookies.get('ur_fat_remember_me')} />, document.getElementById('app'));

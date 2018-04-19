@@ -16,9 +16,10 @@ if(!$logged_in) {
 http_response_code(200);
 $response['user'] = get_user();
 
+$_SESSION['add_item_noonce'] = generate_noonce();
+$response['add_item_noonce'] = $_SESSION['add_item_noonce'];
 
-
-
+/*
 
 $now = new DateTime();
 $ny_time  = new DateTimeZone('America/New_York');
@@ -35,6 +36,7 @@ foreach($response['today_posts'] as $k => $p) {
 
  $_SESSION['add_item_noonce'] = generate_noonce();
  $response['add_item_noonce'] = $_SESSION['add_item_noonce'];
+ */
 
 echo json_encode($response);
 die();

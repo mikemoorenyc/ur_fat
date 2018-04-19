@@ -11,9 +11,26 @@ export default class LoginForm extends Component {
       pass: '',
       error: null,
       checking: false,
-      login_noonce:props.login_noonce
+      login_noonce:null
     }
     this.submitForm = this.submitForm.bind(this);
+  }
+  componentDidMount() {
+    let formdata = new FormData();
+    formdata.set('noonce_key',"login_noonce");
+    axios({
+      method: 'post',
+      url: window.location.pathname+'api/create-noonce.php',
+      config: { headers: {'Content-Type': 'multipart/form-data' }},
+      data: formdata
+    })
+    .then(function (response) {
+      this.setState({login_noonce: response.data.login_noonce});
+      return false;
+    }.bind(this))
+    .catch(function (error) {
+      alert('Could not get a login noonce');
+    })
   }
   submitForm(e) {
     e.preventDefault();
@@ -37,7 +54,6 @@ export default class LoginForm extends Component {
     })
     .then(function (response) {
 
-      console.log(response);
       if(response.data.logged_in) {
         global.emitter.emit('login-status', true, response.data.user);
       }
@@ -57,6 +73,10 @@ export default class LoginForm extends Component {
 
 	render(props, state) {
     let loadingScreen = null;
+    let disabled = false;
+    if(!state.login_noonce) {
+      disabled = true;
+    }
 
     if(state.checking) {
       loadingScreen = (
@@ -67,7 +87,7 @@ export default class LoginForm extends Component {
     }
 
 		return (
-			<form style={{position:"relative"}} onSubmit={this.submitForm}>
+			<form data-noonce={state.login_noonce} style={{position:"relative"}} onSubmit={this.submitForm}>
         <label>Email</label><br/>
         <input type="email" required value={state.email}
 						onInput={linkState(this, 'email')} />
@@ -76,7 +96,7 @@ export default class LoginForm extends Component {
         <input type="password" required value={state.pass}
 						onInput={linkState(this, 'pass')} />
         <br/><br/>
-        <button type="submit">Submit</button>
+        <button disabled={disabled} type="submit">Submit</button>
         <div>{state.error}</div>
         {loadingScreen}
       </form>
