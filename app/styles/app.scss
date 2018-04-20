@@ -1,7 +1,25 @@
 @import 'normalize.scss';
+@import "color.scss";
+@import "login.scss";
 body {
-  background:#fafafa;
+  background:$white;
   font-size: 16px;
   line-height: 1.44;
   font-family: sans-serif;
+  color:$black;
+}
+*, *:after, *:before {
+  box-sizing: border-box;
+}
+
+#app {
+  width: 100%;
+  max-width: 400px;
+  height: 100vh;
+  position:relative;
+  margin: 0 auto;
+  @media(min-width: 402px) {
+    border: 1px solid grey;
+    border-width: 0 1px;
+  }
 }

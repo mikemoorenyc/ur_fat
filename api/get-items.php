@@ -26,7 +26,7 @@ $response['offset'] = $offset;
 $response['items'] = $today_posts;
 
 $response['edit_noonces'] = array();
-foreach($response['today_posts'] as $k => $p) {
+foreach($response['items'] as $k => $p) {
   $_SESSION['edit_'.$p['id'].'_noonce'] = generate_noonce();
   $response['edit_noonces']['item_'.$p['id']] = $_SESSION['edit_'.$p['id'].'_noonce'];
 }

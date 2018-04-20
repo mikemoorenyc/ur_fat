@@ -58,6 +58,7 @@ class App extends Component {
   getItems() {
     axios.get(window.location.pathname+'api/get-items.php')
     .then(function (response) {
+
       let d = response.data;
       this.setState({
         today_posts: d.items,
@@ -65,12 +66,13 @@ class App extends Component {
         top_threshold: d.top_threshold,
         fetching_posts: false,
         edit_noonces: d.edit_noonces
-      })
-      .catch(function (error) {
-        
       });
-      
+      console.log(this.state);
+      return false;
     }.bind(this))
+    .catch(function (error) {
+      console.log(error);
+    });
   }
   checkLogin() {
     axios.get(window.location.pathname+'api/check-login.php')
@@ -83,7 +85,8 @@ class App extends Component {
       });
       if(response.data.logged_in) {
         this.setState({
-          add_item_noonce: response.data.add_item_noonce
+          add_item_noonce: response.data.add_item_noonce,
+          user: response.data.user
         });
       }
     }.bind(this))
@@ -251,7 +254,7 @@ class App extends Component {
       return <LoginForm />;
     }
     return (
-      <div>
+      <div id="app">
       <List
       fetching_posts={state.fetching_posts}
       today_posts={state.today_posts}
@@ -293,6 +296,6 @@ class App extends Component {
   }
 }
 
-render(<App 
+render(<App
 
        previousLogin={Cookies.get('ur_fat_remember_me')} />, document.getElementById('app'));

@@ -1,0 +1,36 @@
+#login-form {
+  padding: 48px 16px;
+  h1 {
+    font-size: 2em;
+    line-height: 1.2;
+    margin-bottom: .75em;
+    font-family: $ab;
+    svg {
+      margin-right: 6px;
+    }
+  }
+  input {
+    display:block;
+    line-height: 44px;
+    padding: 0 16px;
+    border: 1px solid rgba(0,0,0,.12);
+    width: 100%;
+    font-size: 14px;
+    margin-bottom: 12px;
+
+    &:focus {
+      border-color:$blue;
+    }
+  }
+  button {
+    display:block;
+    border: 0;
+    background: $blue;
+    color:white;
+    width: 100%;
+    margin-top: 24px;
+    line-height: 44px;
+    font-weight: bold;
+    font-size: 14px;
+  }
+}
