@@ -25,12 +25,16 @@
   button {
     display:block;
     border: 0;
-    background: $blue;
-    color:white;
+    border: 1px solid $blue;
+    color: $blue;
     width: 100%;
     margin-top: 24px;
     line-height: 44px;
     font-weight: bold;
     font-size: 14px;
+    &:active {
+      background:$blue;
+      color:white;
+    }
   }
 }
