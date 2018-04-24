@@ -79,7 +79,7 @@ export default class LoginForm extends Component {
     }
 
     if(state.checking) {
-      loadingScreen = (
+      return (
         <div style={{backgroundColor: "white",position:"absolute", left: 0, top: 0, right: 0, bottom: 0}} >
           Loading
         </div>
@@ -99,7 +99,7 @@ export default class LoginForm extends Component {
 
         <button disabled={disabled} type="submit">Login</button>
         <div>{state.error}</div>
-        {loadingScreen}
+    
       </form>
 
 		);
