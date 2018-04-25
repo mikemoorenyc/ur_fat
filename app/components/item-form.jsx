@@ -61,7 +61,7 @@ export default class ItemForm extends Component {
        <header>
          <button type="reset" onClick={this.resetForm}>Cancel</button>
          <h2>MORE food?!</h2>
-         <button disabled={disabled} type="submit">{submitText}</button>
+         <button disabled={disabled} onClick={this.submitForm} type="submit">{submitText}</button>
        </header>
        <main>
          <form onSubmit={this.submitForm}>
@@ -69,7 +69,7 @@ export default class ItemForm extends Component {
         <input type="text" value={state.title} onInput={linkState(this, 'title')} required />
 
 
-        
+           <button disabled={disabled} style={{display: "none"}} type="submit">{submitText}</button>
         
         </form>
          
