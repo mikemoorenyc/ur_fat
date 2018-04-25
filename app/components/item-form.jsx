@@ -7,29 +7,16 @@ export default class ItemForm extends Component {
   constructor(props) {
     super();
     this.state = {
-     item: props.item,
+     id: props.item.id,
+     title: props.item.post_title,
+     amount: props.item.post_amount,
+     date: props.item.post_date,
      method: props.editState
     }
     this.resetForm = this.resetForm.bind(this);
     this.submitForm = this.submitForm.bind(this);
   }
 
-  
-  componentWillUnmount() {
-
-  }
-  resetForm(e) {
-  e.preventDefault();
-   this.setState({
-    title: '',
-    amount: '',
-    notes: '',
-    id: null,
-    method: null,
-    opened: false,
-    noonce: null
-   });
-  }
   submitForm(e) {
     e.preventDefault();
     let endpoint = "add-item";
@@ -39,11 +26,11 @@ export default class ItemForm extends Component {
     let item = {
       id: this.state.id,
       post_title: this.state.title,
-      post_date: Date.now(),
+      post_amount: this.state.amount,
+      post_date:this.state.date,
       noonce: this.state.noonce
     }
     global.emitter.emit(endpoint, item);
-    this.resetForm(e);
 
   }
   render(props,state) {
@@ -67,7 +54,8 @@ export default class ItemForm extends Component {
          <form onSubmit={this.submitForm}>
         <label>What did you eat?</label><br/>
         <input type="text" value={state.title} onInput={linkState(this, 'title')} required />
-
+         <label>How much did you eat?</label><br/>
+        <input type="text" value={state.amount} onInput={linkState(this, 'amount')}  />
 
            <button disabled={disabled} style={{display: "none"}} type="submit">{submitText}</button>
         
