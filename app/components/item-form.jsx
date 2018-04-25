@@ -7,32 +7,16 @@ export default class ItemForm extends Component {
   constructor(props) {
     super();
     this.state = {
-     opened: false,
-     item: {},
-     method: null
+     item: props.item,
+     method: props.editState
     }
     this.resetForm = this.resetForm.bind(this);
     this.submitForm = this.submitForm.bind(this);
   }
 
-  componentDidMount() {
-
-    this.openItemListener = global.emitter.addListener('open-item-form',function(item, method){
-
-      this.setState({
-        title: item.post_title,
-        amount: item.amount,
-        notes: item.notes,
-        method: method,
-        id: item.id,
-        opened: true,
-        noonce: item.noonce
-      });
-    }.bind(this))
-
-  }
+  
   componentWillUnmount() {
-   this.openItemListener.remove();
+
   }
   resetForm(e) {
   e.preventDefault();
@@ -64,10 +48,6 @@ export default class ItemForm extends Component {
   }
   render(props,state) {
 
-   if(!state.opened) {
-    return null;
-   }
-
    let submitText = "Add";
    if(state.method === "UPDATE") {
      submitText = "Save";
@@ -77,14 +57,25 @@ export default class ItemForm extends Component {
       disabled = true;
    }
    return (
-     <form onSubmit={this.submitForm} style={{position:"absolute", background:"white", left: 0, right:0, bottom:0, top:0}}>
-        <label>Title</label><br/>
+     <div>
+       <header>
+         <button type="reset" onClick={this.resetForm}>Cancel</button>
+         <h2>MORE food?!</h2>
+         <button disabled={disabled} type="submit">{submitText}</button>
+       </header>
+       <main>
+         <form onSubmit={this.submitForm}>
+        <label>What did you eat?</label><br/>
         <input type="text" value={state.title} onInput={linkState(this, 'title')} required />
 
 
-        <button type="reset" onClick={this.resetForm}>Cancel</button>
-        <button disabled={disabled} type="submit">{submitText}</button>
-     </form>
+        
+        
+        </form>
+         
+       </main>
+     </div>
+     
    )
 
 
