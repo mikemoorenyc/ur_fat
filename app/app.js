@@ -40,7 +40,9 @@ class App extends Component {
         today_posts: [],
         edit_noonces: [],
         top_threshold: Math.floor(end.getTime() / 1000),
-        bottom_threshold: Math.floor(start.getTime() / 1000)
+        bottom_threshold: Math.floor(start.getTime() / 1000),
+        editing: false,
+        editItem: null
       }
     this.newItem = this.newItem.bind(this);
     this.logout = this.logout.bind(this);
@@ -242,6 +244,7 @@ class App extends Component {
     amount: '',
     notes: ''
    }
+   this.setState({editing: "ADD", editItem: item});
    global.emitter.emit('open-item-form', item,"ADD");
   }
 
@@ -253,14 +256,24 @@ class App extends Component {
     if( ( !state.logged_in)) {
       return <LoginForm />;
     }
+    if(state.editing) {
+     return <ItemForm editState={state.editing} item={state.editItem} />
+    }
     return (
       <div id="app">
-      <List
+        <header>
+          <h1>What you ate today</h1>
+        </header>
+        <main>
+          <List
       fetching_posts={state.fetching_posts}
       today_posts={state.today_posts}
       />
-      <button disabled={disableAdd} onClick={this.newItem}>New Item</button>
-      <button onClick={this.logout}>Logout</button>
+        </main>
+        <nav>
+          <button disabled={disableAdd} onClick={this.newItem}>New Item</button>
+          <button onClick={this.logout}>Logout</button>
+        </nav>
       </div>
     )
     /*
