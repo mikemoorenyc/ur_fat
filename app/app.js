@@ -193,12 +193,15 @@ class App extends Component {
     this.newItemListen = global.emitter.addListener('add-item',function(item){
       let formdata = new FormData();
       formdata.set('post_title',item.post_title);
+      formdata.set('post_amount',item.post_amount);
       formdata.set('local_id',item.id);
       formdata.set('add_item_noonce',this.state.add_item_noonce);
       //ADD LOCALLY
       var local_id = item.id;
       this.setState({
-        today_posts: addItem(this.state.today_posts,item)
+        today_posts: addItem(this.state.today_posts,item),
+        editing: null,
+        editItem: {}
       });
 
       axios({
