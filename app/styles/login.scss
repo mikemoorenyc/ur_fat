@@ -25,16 +25,81 @@
   button {
     display:block;
     border: 0;
-    border: 1px solid $blue;
+    border: 2px solid $blue;
     color: $blue;
     width: 100%;
     margin-top: 24px;
     line-height: 44px;
     font-weight: bold;
     font-size: 14px;
+    &[disabled] {
+      border-style: dashed;
+    }
     &:active {
       background:$blue;
       color:white;
     }
+  }
+  .error-form {
+    margin-bottom: 6px;
+    border: 1px solid currentColor;
+    padding: 8px;
+    font-size: 14px;
+    color:$red;
+    > * {
+      display:inline-block;
+      vertical-align:middle;
+    }
+    svg {
+      width: 20px;
+      height: 20px;
+      margin-right: 4px;
+    }
+  }
+
+  .login-loader {
+    position:absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    .content {
+      position:absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%,-50%);
+      svg {
+        display:block;
+        margin: 0 auto 8px auto;
+        &.loader {
+          animation: loadingSpinner 2s infinite linear;
+        }
+        &.check {
+          animation: iconGrow .15s;
+        }
+      }
+    }
+  }
+
+}
+
+@keyframes loadingSpinner {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes iconGrow {
+  0% {
+
+    transform: scale(0);
+
+  }
+  100% {
+    transform: scale(1);
   }
 }
