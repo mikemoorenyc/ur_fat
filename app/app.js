@@ -237,15 +237,14 @@ class App extends Component {
   }
   newItem(e) {
    e.preventDefault();
-
+   let now = Math.floor(Date.now() / 1000)
    let item = {
-    id: Date.now(),
+    id: now,
     post_title: '',
-    amount: '',
-    notes: ''
+    post_amount: '',
+    post_date: now
    }
    this.setState({editing: "ADD", editItem: item});
-   global.emitter.emit('open-item-form', item,"ADD");
   }
 
   render(props, state) {
@@ -276,35 +275,6 @@ class App extends Component {
         </nav>
       </div>
     )
-    /*
-    let status = 'logged in';
-    if( !state.checked_login) {
-      return (<div>Loggin you in</div>);
-    }
-    if(!state.logged_in ) {
-      return (<LoginForm login_noonce={this.state.login_noonce}/>);
-    }
-
-    return (
-      <div>
-        <div id="main-view">
-          <header><h2>What You Ate Today</h2></header>
-          <List
-          today_posts={state.today_posts}
-          />
-          <div className="bottom-bar">
-            <button onClick={this.newItem}>New Item</button>
-            <button onClick={this.logout}>Logout</button>
-          </div>
-        </div>
-
-
-
-        <ItemForm />
-      </div>
-
-    )
-    */
 
   }
 }
