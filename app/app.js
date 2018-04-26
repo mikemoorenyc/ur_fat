@@ -42,12 +42,16 @@ class App extends Component {
         top_threshold: Math.floor(end.getTime() / 1000),
         bottom_threshold: Math.floor(start.getTime() / 1000),
         editing: false,
-        editItem: null
+        editItem: null,
+        openItem: null
       }
     this.newItem = this.newItem.bind(this);
     this.logout = this.logout.bind(this);
     this.checkLogin = this.checkLogin.bind(this)
     this.getItems = this.getItems.bind(this);
+    this.windowListener = _.debounce(function(){
+      this.setState({openItem: null});
+    }.bind(this),200,{leading:true, trailing:false})
   }
   logout(e) {
     e.preventDefault();
@@ -98,6 +102,9 @@ class App extends Component {
 
   }
   componentDidMount() {
+    
+    window.addEventListener('scroll',this.windowListener);
+    
     if(this.state.logged_in) {
       this.checkLogin();
       /*if not logged in, will do nothing*/
@@ -237,6 +244,7 @@ class App extends Component {
    this.newItemListen.remove();
    this.deleteListen.remove();
    this.updateListen.remove();
+   window.removeEventListener('scroll',this.windowListener);
   }
   newItem(e) {
    e.preventDefault();
@@ -270,6 +278,7 @@ class App extends Component {
           <List
       fetching_posts={state.fetching_posts}
       today_posts={state.today_posts}
+      openItem={state.openItem}
       />
         </main>
         <nav>
