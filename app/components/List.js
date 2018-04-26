@@ -10,11 +10,12 @@ export default function List(props) {
     }
 
     let items = props.today_posts.map(function(e,i){
+     
       return (
 
         <div className="item" key={e.id} data-id={e.id}>{e.post_title} <b>{e.id}</b>
           <br/>
-          <UpdateBtn item={e} /><DeleteBtn id={e.id}  />
+          <UpdateBtn item={e} openItem={props.openItem}/><DeleteBtn id={e.id}  />
           <br/><br/>
         </div>
       );
