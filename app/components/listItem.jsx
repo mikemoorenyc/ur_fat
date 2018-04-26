@@ -2,7 +2,7 @@ import { h, render, Component } from 'preact';
 import DeleteBtn from '../components/DeleteBtn.js';
 import UpdateBtn from '../components/UpdateBtn.js';
 
-export default function ListItem(props) {
+export default class ListItem extends Component {
   constructor(props) {
     super();
   }
