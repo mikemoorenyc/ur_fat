@@ -15,6 +15,10 @@ export default class ItemForm extends Component {
     }
     this.resetForm = this.resetForm.bind(this);
     this.submitForm = this.submitForm.bind(this);
+    this.autoFocus = null;
+    this.getFocus = function(element) {
+      this.autoFocus = element;
+    }.bind(this);
   }
 
   submitForm(e) {
@@ -32,6 +36,11 @@ export default class ItemForm extends Component {
     }
     global.emitter.emit(endpoint, item);
 
+  }
+  componentDidMount() {
+    if(this.autoFocus && this.state.method == "ADD") {
+      this.autoFocus.focus();
+     }
   }
   render(props,state) {
 
@@ -53,7 +62,7 @@ export default class ItemForm extends Component {
        <main>
          <form onSubmit={this.submitForm}>
         <label>What did you eat?</label><br/>
-        <input type="text" value={state.title} onInput={linkState(this, 'title')} required />
+        <input ref={this.getFocus} type="text" value={state.title} onInput={linkState(this, 'title')} required />
          <label>How much did you eat?</label><br/>
         <input type="text" value={state.amount} onInput={linkState(this, 'amount')}  />
 
