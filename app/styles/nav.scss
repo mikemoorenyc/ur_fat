@@ -1,0 +1,41 @@
+nav {
+  height: 46px;
+  border-top: 1px solid $grey-line;
+  position: relative;
+  line-height: 1px;
+  button.new-item {
+    color:$blue;
+    width: 64px;
+    height: 64px;
+    background:white;
+    border-radius: 50%;
+    position:absolute;
+    left: 50%;
+    bottom: 6px;
+    transform: translateX(-50%);
+    svg {
+      position:absolute;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+    }
+  }
+  button.logout {
+    display:inline-block;
+    vertical-align: middle;
+    width: 45px;
+    height: 45px;
+    color: rgba(black, .5);
+    position:relative;
+    svg {
+      display:block;
+      width: 24px;
+      height: 24px;
+      position:absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%,-50%);
+    }
+  }
+}

@@ -8,11 +8,14 @@ import axios from "axios";
 var {EventEmitter} = require('fbemitter');
 global.emitter = new EventEmitter();
 
+var debounce = require('lodash.debounce');
+
 import './styles/app.scss';
 
 import LoginForm from './components/login-form';
 import ItemForm from './components/item-form.jsx';
 import List from './components/List.js';
+import NavButton from './components/NavButton.jsx';
 
 import updateNoonces from './utils/update-noonce.js';
 import { removeItem, addItem, replaceItem } from './utils/list-operations.js';
@@ -49,12 +52,13 @@ class App extends Component {
     this.logout = this.logout.bind(this);
     this.checkLogin = this.checkLogin.bind(this)
     this.getItems = this.getItems.bind(this);
-    this.windowListener = _.debounce(function(){
+    this.windowListener = debounce(function(){
       this.setState({openItem: null});
     }.bind(this),200,{leading:true, trailing:false})
   }
   logout(e) {
     e.preventDefault();
+
     if(!confirm("Are you sure you want to log out? ")) {
       return false;
     }
@@ -73,7 +77,7 @@ class App extends Component {
         fetching_posts: false,
         edit_noonces: d.edit_noonces
       });
-      console.log(this.state);
+
       return false;
     }.bind(this))
     .catch(function (error) {
@@ -102,9 +106,9 @@ class App extends Component {
 
   }
   componentDidMount() {
-    
+
     window.addEventListener('scroll',this.windowListener);
-    
+
     if(this.state.logged_in) {
       this.checkLogin();
       /*if not logged in, will do nothing*/
@@ -264,10 +268,10 @@ class App extends Component {
        disableAdd = true;
     }
     if( ( !state.logged_in)) {
-      return <LoginForm />;
+      return <div id="app"><LoginForm /></div>;
     }
     if(state.editing) {
-     return <ItemForm editState={state.editing} item={state.editItem} />
+     return <div id="app"> <ItemForm editState={state.editing} item={state.editItem} /></div>
     }
     return (
       <div id="app">
@@ -282,8 +286,9 @@ class App extends Component {
       />
         </main>
         <nav>
-          <button disabled={disableAdd} onClick={this.newItem}>New Item</button>
-          <button onClick={this.logout}>Logout</button>
+          <NavButton disabled={disableAdd} type={"new-item"} copy={"Add Item"} clickAction={this.newItem} />
+
+          <NavButton type={"logout"} copy={"Log Out"} clickAction={this.logout} />
         </nav>
       </div>
     )
@@ -293,4 +298,4 @@ class App extends Component {
 
 render(<App
 
-       previousLogin={Cookies.get('ur_fat_remember_me')} />, document.getElementById('app'));
+       previousLogin={Cookies.get('ur_fat_remember_me')} />, document.getElementById('root'));

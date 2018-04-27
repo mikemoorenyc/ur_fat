@@ -1,6 +1,8 @@
 @import 'normalize.scss';
 @import "color.scss";
 @import "login.scss";
+@import 'header.scss';
+@import 'nav.scss';
 body {
   background:$white;
   font-size: 16px;
@@ -21,5 +23,16 @@ body {
   @media(min-width: 402px) {
     border: 1px solid grey;
     border-width: 0 1px;
+  }
+}
+//SCAFFOLD
+#app {
+  display:flex;
+  flex-direction: column;
+  main {
+    flex: 1;
+    overflow-x: hidden;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
   }
 }
