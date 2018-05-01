@@ -134,10 +134,10 @@ export default class LoginForm extends Component {
 
         {error}
 
-        <input ref={this.getFocus} placeholder="email address" type="email" required value={state.email}
+        <input ref={this.getFocus} placeholder="email address" type="email" class="input-text"required value={state.email}
 						onInput={linkState(this, 'email')} />
 
-        <input placeholder="password" type="password" required value={state.pass}
+        <input placeholder="password" type="password" required class="input-text" value={state.pass}
 						onInput={linkState(this, 'pass')} />
 
         <button disabled={disabled} type="submit">Login</button>

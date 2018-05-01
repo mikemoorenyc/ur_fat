@@ -11,7 +11,8 @@ export default class ItemForm extends Component {
      title: props.item.post_title,
      amount: props.item.post_amount,
      date: props.item.post_date,
-     method: props.editState
+     method: props.editState,
+     transState: ''
     }
     this.resetForm = this.resetForm.bind(this);
     this.submitForm = this.submitForm.bind(this);
@@ -23,6 +24,9 @@ export default class ItemForm extends Component {
 
   submitForm(e) {
     e.preventDefault();
+    if(!this.state.title) {
+      return false;
+    }
     let endpoint = "add-item";
     if(this.state.method === "UPDATE") {
       endpoint = 'update-item';
@@ -35,9 +39,15 @@ export default class ItemForm extends Component {
       noonce: this.state.noonce
     }
     global.emitter.emit(endpoint, item);
-
+    this.resetForm(e);
+  }
+  resetForm(e) {
+    e.preventDefault();
+    this.setState({transState: 'translateX(100%)'});
+    setTimeout(this.props.cancelForm,150)
   }
   componentDidMount() {
+    this.setState({transState: 'translateX(0)'});
     if(this.autoFocus && this.state.method == "ADD") {
       this.autoFocus.focus();
      }
@@ -53,26 +63,32 @@ export default class ItemForm extends Component {
       disabled = true;
    }
    return (
-     <div>
-       <header>
-         <button type="reset" onClick={this.resetForm}>Cancel</button>
-         <h2>MORE food?!</h2>
-         <button disabled={disabled} onClick={this.submitForm} type="submit">{submitText}</button>
-       </header>
-       <main>
-         <form onSubmit={this.submitForm}>
-        <label>What did you eat?</label><br/>
-        <input ref={this.getFocus} type="text" value={state.title} onInput={linkState(this, 'title')} required />
-         <label>How much did you eat?</label><br/>
-        <input type="text" value={state.amount} onInput={linkState(this, 'amount')}  />
 
-           <button disabled={disabled} style={{display: "none"}} type="submit">{submitText}</button>
-        
-        </form>
-         
-       </main>
+     <div>
+      <div class="item-form-overlay"></div>
+      <div class="app item-form" style={{transform: state.transState}}>
+        <header class="with-buttons">
+          <div class="button-holder"><button type="reset" class="secondary" onClick={this.resetForm}>Cancel</button></div>
+          <h1>MORE food?!</h1>
+          <div class="button-holder"><button type="reset" disabled={disabled} onClick={this.submitForm}>{submitText}</button></div>
+        </header>
+        <main>
+          <form onSubmit={this.submitForm}>
+          <div class="form-row">
+            <label>What did you eat?</label>
+            <input ref={this.getFocus} type="text" value={state.title} onInput={linkState(this, 'title')} required class="input-text"/>
+          </div>
+          <div class="form-row">
+            <label>How much did you eat?</label>
+            <input type="text" value={state.amount} onInput={linkState(this, 'amount')}  class="input-text"/>
+          </div>
+            <button disabled={disabled} style={{display: "none"}} type="submit">{submitText}</button>
+         </form>
+
+        </main>
+      </div>
      </div>
-     
+
    )
 
 

@@ -12,7 +12,7 @@ var debounce = require('lodash.debounce');
 
 import './styles/app.scss';
 
-import LoginForm from './components/login-form';
+import LoginForm from './components/login-form.jsx';
 import ItemForm from './components/item-form.jsx';
 import List from './components/List.js';
 import NavButton from './components/NavButton.jsx';
@@ -52,6 +52,7 @@ class App extends Component {
     this.logout = this.logout.bind(this);
     this.checkLogin = this.checkLogin.bind(this)
     this.getItems = this.getItems.bind(this);
+    this.cancelForm = this.cancelForm.bind(this);
     this.windowListener = debounce(function(){
       this.setState({openItem: null});
     }.bind(this),200,{leading:true, trailing:false})
@@ -64,6 +65,12 @@ class App extends Component {
     }
     let current = window.location.href;
     window.location.href = current+'form-process-user-logout.php?re='+current;
+  }
+  cancelForm(e) {
+    this.setState({
+      editing: false,
+      editItem: false
+    });
   }
   getItems() {
     axios.get(window.location.pathname+'api/get-items.php')
@@ -263,18 +270,20 @@ class App extends Component {
   }
 
   render(props, state) {
-    let disableAdd = false
+    let disableAdd = false,
+        editForm = null;
     if(!state.add_item_noonce) {
        disableAdd = true;
     }
     if( ( !state.logged_in)) {
-      return <div id="app"><LoginForm /></div>;
+      return <div class="app"><LoginForm /></div>;
     }
     if(state.editing) {
-     return <div id="app"> <ItemForm editState={state.editing} item={state.editItem} /></div>
+     editForm =  <ItemForm cancelForm={this.cancelForm}  editState={state.editing} item={state.editItem} />
     }
     return (
-      <div id="app">
+      <div>
+      <div class="app">
         <header>
           <h1>What you ate today</h1>
         </header>
@@ -291,6 +300,9 @@ class App extends Component {
           <NavButton type={"logout"} copy={"Log Out"} clickAction={this.logout} />
         </nav>
       </div>
+      {editForm}
+      </div>
+
     )
 
   }
