@@ -57,61 +57,6 @@ class App extends Component {
       this.setState({openItem: null});
     }.bind(this),200,{leading:true, trailing:false})
   }
-  logout(e) {
-    e.preventDefault();
-
-    if(!confirm("Are you sure you want to log out? ")) {
-      return false;
-    }
-    let current = window.location.href;
-    window.location.href = current+'form-process-user-logout.php?re='+current;
-  }
-  cancelForm(e) {
-    this.setState({
-      editing: false,
-      editItem: false
-    });
-  }
-  getItems() {
-    axios.get(window.location.pathname+'api/get-items.php')
-    .then(function (response) {
-
-      let d = response.data;
-      this.setState({
-        today_posts: d.items,
-        bottom_threshold: d.bottom_threshold,
-        top_threshold: d.top_threshold,
-        fetching_posts: false,
-        edit_noonces: d.edit_noonces
-      });
-
-      return false;
-    }.bind(this))
-    .catch(function (error) {
-      console.log(error);
-    });
-  }
-  checkLogin() {
-    axios.get(window.location.pathname+'api/check-login.php')
-    .then(function (response) {
-
-      this.setState({
-        checked_login: true,
-        logged_in: response.data.logged_in,
-        login_noonce: response.data.login_noonce,
-      });
-      if(response.data.logged_in) {
-        this.setState({
-          add_item_noonce: response.data.add_item_noonce,
-          user: response.data.user
-        });
-      }
-    }.bind(this))
-    .catch(function (error) {
-      console.log(error);
-    });
-
-  }
   componentDidMount() {
 
     window.addEventListener('scroll',this.windowListener);
@@ -250,6 +195,65 @@ class App extends Component {
     }.bind(this))
 
   }
+  checkLogin() {
+    axios.get(window.location.pathname+'api/check-login.php')
+    .then(function (response) {
+
+      this.setState({
+        checked_login: true,
+        logged_in: response.data.logged_in,
+        login_noonce: response.data.login_noonce,
+      });
+      if(response.data.logged_in) {
+        this.setState({
+          add_item_noonce: response.data.add_item_noonce,
+          user: response.data.user
+        });
+      }
+    }.bind(this))
+    .catch(function (error) {
+      console.log(error);
+    });
+
+  }
+  getItems() {
+    axios.get(window.location.pathname+'api/get-items.php')
+    .then(function (response) {
+
+      let d = response.data;
+      this.setState({
+        today_posts: d.items,
+        bottom_threshold: d.bottom_threshold,
+        top_threshold: d.top_threshold,
+        fetching_posts: false,
+        edit_noonces: d.edit_noonces
+      });
+
+      return false;
+    }.bind(this))
+    .catch(function (error) {
+      console.log(error);
+    });
+  }
+  cancelForm(e) {
+    this.setState({
+      editing: false,
+      editItem: false
+    });
+  }
+  
+  logout(e) {
+    e.preventDefault();
+
+    if(!confirm("Are you sure you want to log out? ")) {
+      return false;
+    }
+    let current = window.location.href;
+    window.location.href = current+'form-process-user-logout.php?re='+current;
+  }
+  
+  
+  
   componentWillUnmount() {
    this.loginListen.remove();
    this.newItemListen.remove();
