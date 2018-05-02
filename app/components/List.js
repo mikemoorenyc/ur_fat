@@ -1,8 +1,7 @@
 import { h, render } from 'preact';
 import linkState from 'linkstate';
 
-import DeleteBtn from '../components/DeleteBtn.js';
-import UpdateBtn from '../components/UpdateBtn.js';
+import ListItem from '../components/listItem.jsx';
 
 export default function List(props) {
   if(!props.today_posts.length) {
@@ -10,21 +9,15 @@ export default function List(props) {
     }
 
     let items = props.today_posts.map(function(e,i){
-     
-      return (
 
-        <div className="item" key={e.id} data-id={e.id}>{e.post_title} <b>{e.id}</b>
-          <br/>
-          <UpdateBtn item={e} openItem={props.openItem}/><DeleteBtn id={e.id}  />
-          <br/><br/>
-        </div>
+      return (
+        <ListItem key={e.id} item={e} openItem={props.openItem} />
       );
     }.bind(this));
     return (
-      <div className="items">
+      <div className="list-items">
       {items}
       </div>
     )
-  
-}
 
+}

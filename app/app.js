@@ -49,6 +49,7 @@ class App extends Component {
         openItem: null
       }
     this.newItem = this.newItem.bind(this);
+    this.updateItem = this.updateItem.bind(this);
     this.logout = this.logout.bind(this);
     this.checkLogin = this.checkLogin.bind(this)
     this.getItems = this.getItems.bind(this);
@@ -81,11 +82,16 @@ class App extends Component {
       }
     }.bind(this));
 
+    this.listItemOpenListener = global.emitter.addListener('list-item-open', function(id){
+      this.setState({openItem: id});
+    }.bind(this))
+
     this.updateListen = global.emitter.addListener('update-item',function(item){
       let formdata = new FormData();
       formdata.set('id',item.id);
       formdata.set('update_noonce',this.state.edit_noonces['item_'+item.id]);
       formdata.set('post_title',item.post_title);
+      formdata.set('post_amount',item.post_amount);
       let update_key = this.state.today_posts.findIndex(function(e){
         return parseInt(e.id) === parseInt(item.id);
       });
@@ -194,6 +200,10 @@ class App extends Component {
       }.bind(this));
     }.bind(this))
 
+    this.openItemForm = global.emitter.addListener('open-item-form',function(item,method){
+      if(method == "UPDATE") {this.updateItem(item) }
+    }.bind(this));
+
   }
   checkLogin() {
     axios.get(window.location.pathname+'api/check-login.php')
@@ -241,7 +251,7 @@ class App extends Component {
       editItem: false
     });
   }
-  
+
   logout(e) {
     e.preventDefault();
 
@@ -251,16 +261,7 @@ class App extends Component {
     let current = window.location.href;
     window.location.href = current+'form-process-user-logout.php?re='+current;
   }
-  
-  
-  
-  componentWillUnmount() {
-   this.loginListen.remove();
-   this.newItemListen.remove();
-   this.deleteListen.remove();
-   this.updateListen.remove();
-   window.removeEventListener('scroll',this.windowListener);
-  }
+
   newItem(e) {
    e.preventDefault();
    let now = Math.floor(Date.now() / 1000)
@@ -272,6 +273,24 @@ class App extends Component {
    }
    this.setState({editing: "ADD", editItem: item});
   }
+  updateItem(item) {
+    let updateItem = {
+      id: item.id,
+      post_title: item.post_title,
+      post_amount: item.post_amount,
+      post_date: item.post_date
+    }
+    this.setState({editing: "UPDATE", editItem: updateItem});
+  }
+
+  componentWillUnmount() {
+   this.loginListen.remove();
+   this.newItemListen.remove();
+   this.deleteListen.remove();
+   this.updateListen.remove();
+   window.removeEventListener('scroll',this.windowListener);
+  }
+
 
   render(props, state) {
     let disableAdd = false,

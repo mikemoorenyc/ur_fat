@@ -1,0 +1,53 @@
+.list-items {
+  padding-bottom: 36px;
+  .list-item {
+    width: 100%;
+    position:relative;
+    &:before {
+      display: block;
+      content:'';
+      position:absolute;
+      height: 1px;
+      border-top: 1px solid rgba(black,.5);
+      left: 16px;
+      bottom: 0;
+      right: 16px;
+    }
+    &.opened {
+      .slider {
+        transform: translateX((-45px * 2));
+      }
+    }
+    .slider {
+      display:flex;
+      width: calc(100% + (45px * 2));
+
+      transition: transform .15s;
+
+      .post-title {
+        padding: 16px;
+        min-height: 48px;
+        flex: 1;
+      }
+      .item-button {
+        width: 45px;
+        position:relative;
+        svg {
+          position:absolute;
+          left: 50%;
+          top: 50%;
+          transform: translate(-50%,-50%);
+          width: 20px;
+          height: 20px;
+          &.edit {
+            color:$blue;
+          }
+          &.delete {
+            color:$red;
+          }
+
+        }
+      }
+    }
+  }
+}

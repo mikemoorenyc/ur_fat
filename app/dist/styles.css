@@ -187,7 +187,7 @@ nav {
   top: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0, 0, 0, 0.05); }
+  background: transparent; }
 
 .app.item-form {
   position: fixed;
@@ -206,6 +206,45 @@ nav {
       text-transform: uppercase;
       margin-bottom: 4px; }
 
+.list-items {
+  padding-bottom: 36px; }
+  .list-items .list-item {
+    width: 100%;
+    position: relative; }
+    .list-items .list-item:before {
+      display: block;
+      content: '';
+      position: absolute;
+      height: 1px;
+      border-top: 1px solid rgba(0, 0, 0, 0.5);
+      left: 16px;
+      bottom: 0;
+      right: 16px; }
+    .list-items .list-item.opened .slider {
+      transform: translateX(-90px); }
+    .list-items .list-item .slider {
+      display: flex;
+      width: calc(100% + (45px * 2));
+      transition: transform .15s; }
+      .list-items .list-item .slider .post-title {
+        padding: 16px;
+        min-height: 48px;
+        flex: 1; }
+      .list-items .list-item .slider .item-button {
+        width: 45px;
+        position: relative; }
+        .list-items .list-item .slider .item-button svg {
+          position: absolute;
+          left: 50%;
+          top: 50%;
+          transform: translate(-50%, -50%);
+          width: 20px;
+          height: 20px; }
+          .list-items .list-item .slider .item-button svg.edit {
+            color: #002EA7; }
+          .list-items .list-item .slider .item-button svg.delete {
+            color: #dc3545; }
+
 body {
   background: #fafafa;
   font-size: 16px;
@@ -216,16 +255,23 @@ body {
 *, *:after, *:before {
   box-sizing: border-box; }
 
-.app {
+#root {
+  position: relative;
+  position: relative;
+  margin: 0 auto;
   width: 100%;
   max-width: 400px;
+  overflow: hidden; }
+  @media (min-width: 402px) {
+    #root {
+      border: 1px solid grey;
+      border-width: 0 1px; } }
+
+.app {
+  width: 100%;
   height: 100vh;
   position: relative;
   margin: 0 auto; }
-  @media (min-width: 402px) {
-    .app {
-      border: 1px solid grey;
-      border-width: 0 1px; } }
 
 .app {
   display: flex;

@@ -28,6 +28,7 @@
     "babel-plugin-transform-react-jsx": "^6.24.1",
     "babel-preset-es2015": "^6.24.1",
     "fbemitter": "^2.1.1",
+    "hammerjs": "^2.0.8",
     "js-cookie": "^2.2.0",
     "linkstate": "^1.1.1",
     "lodash.debounce": "^4.0.8"
