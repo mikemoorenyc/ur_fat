@@ -60,7 +60,7 @@ class App extends Component {
   }
   componentDidMount() {
 
-    window.addEventListener('scroll',this.windowListener);
+    
 
     if(this.state.logged_in) {
       this.checkLogin();
@@ -288,7 +288,7 @@ class App extends Component {
    this.newItemListen.remove();
    this.deleteListen.remove();
    this.updateListen.remove();
-   window.removeEventListener('scroll',this.windowListener);
+   
   }
 
 
@@ -310,7 +310,7 @@ class App extends Component {
         <header>
           <h1>What you ate today</h1>
         </header>
-        <main>
+        <main onScroll={this.windowListener}>
           <List
       fetching_posts={state.fetching_posts}
       today_posts={state.today_posts}
