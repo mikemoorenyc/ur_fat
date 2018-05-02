@@ -55,12 +55,11 @@ class App extends Component {
     this.getItems = this.getItems.bind(this);
     this.cancelForm = this.cancelForm.bind(this);
     this.windowListener = debounce(function(){
+      console.log('dd');
       this.setState({openItem: null});
     }.bind(this),200,{leading:true, trailing:false})
   }
   componentDidMount() {
-
-    
 
     if(this.state.logged_in) {
       this.checkLogin();
@@ -288,7 +287,7 @@ class App extends Component {
    this.newItemListen.remove();
    this.deleteListen.remove();
    this.updateListen.remove();
-   
+
   }
 
 

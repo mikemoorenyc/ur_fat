@@ -4,7 +4,7 @@ var ExtractTextPlugin = require('extract-text-webpack-plugin');
 module.exports = {
   entry: "./app.js",//path relative to this file
   output: {
-    path: __dirname + "/dist",
+    path: __dirname + "/../dist",
     filename: "bundle.js"
   },
   watch:true,
@@ -38,7 +38,7 @@ module.exports = {
         new ExtractTextPlugin("styles.css"),
         new HtmlWebpackPlugin({
             hash: true,
-            filename: '../../app.html',
+            filename: '../index.html',
             template: './index.html'
         }),
 

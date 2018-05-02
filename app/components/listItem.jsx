@@ -32,12 +32,16 @@ export default class ListItem extends Component {
 
   render(props,state) {
    let amt = '';
+   let of = '';
    let classList = "list-item ";
    if(props.openItem === props.item.id) {
     classList += 'opened';
    }
+   if(props.item.post_amount && isNaN(props.item.post_amount)) {
+     of = 'of '
+   }
    if(props.item.post_amount) {
-    amt =  <span><strong>{props.item.post_amount}</strong> of </span>
+    amt =  <span><strong>{props.item.post_amount}</strong> {of} </span>
    }
    return(
     <div ref={this.getItemDOM} class={classList}>
