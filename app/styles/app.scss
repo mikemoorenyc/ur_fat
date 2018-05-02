@@ -41,7 +41,7 @@ body {
   main {
     flex: 1;
     overflow-x: hidden;
-    overflow-y: auto;
+    overflow-y: scroll;
     -webkit-overflow-scrolling: touch;
   }
 }
