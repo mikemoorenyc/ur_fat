@@ -1,4 +1,5 @@
 <?php
+$api_layer = true;
 require_once '../header.php';
 
 function return_user($logged_in, $id=null) {

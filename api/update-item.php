@@ -1,6 +1,6 @@
 <?php
-set_include_path('../');
-require 'header.php';
+$api_layer = true;
+require '../header.php';
 
 function badRequest($code=400) {
   http_response_code($code);

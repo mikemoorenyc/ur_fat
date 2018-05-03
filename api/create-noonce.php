@@ -1,6 +1,6 @@
 <?php
-set_include_path('../');
-require 'header.php';
+$api_layer = true;
+require '../header.php';
 
 if(!$_POST['noonce_key']) {
 http_response_code(400);

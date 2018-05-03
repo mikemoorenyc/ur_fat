@@ -57,7 +57,7 @@ export default class LoginForm extends Component {
     })
     .then(function (response) {
       this.setState({login_noonce: response.data.login_noonce});
-      return false;
+      
     }.bind(this))
     .catch(function (error) {
       alert('Could not get a login noonce');

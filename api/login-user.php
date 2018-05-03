@@ -1,6 +1,6 @@
 <?php
-set_include_path('../');
-require 'header.php';
+$api_layer = true;
+require '../header.php';
 
 if($_SESSION['login_noonce'] !== $_POST['login_noonce']) {
   http_response_code(401);

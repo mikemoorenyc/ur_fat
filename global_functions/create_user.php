@@ -1,6 +1,7 @@
 <?php
 function create_user($email=null, $password=null) {
   global $db_conn;
+
   if(!$email || !$password) {
     return false;
   }
@@ -29,16 +30,16 @@ function create_user($email=null, $password=null) {
   //ALL GOOD ADD THE USER
   $stored_pass = password_hash(
       base64_encode(
-          hash('sha256', mysql_real_escape_string($password), true)
+          hash('sha256', $db_conn->real_escape_string($password), true)
       ),
       PASSWORD_DEFAULT
   );
 
-  $insert_db = "INSERT INTO users (email, password, reg_date) VALUES ('".mysql_real_escape_string($email)."', '".$stored_pass."', '".time()."')";
+  $insert_db = "INSERT INTO users (email, password, reg_date) VALUES ('".$db_conn->real_escape_string($email)."', '".$stored_pass."', '".time()."')";
 
   $add_user = mysqli_query($db_conn, $insert_db);
 
-  
+
   if ($add_user) {
     return array(
       "success" => true,

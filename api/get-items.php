@@ -1,6 +1,6 @@
 <?php
-set_include_path('../');
-require 'header.php';
+$api_layer = true;
+require '../header.php';
 
 if(!is_user_logged_in()) {
  http_response_code(401);

@@ -4,12 +4,14 @@ require_once 'header.php';
 if($_SESSION['create_noonce'] !== $_POST['create_noonce']) {
   die('Bad request');
 }
-echo 'all good';
+//echo 'all good';
 unset($_SESSION['create_noonce']);
 unset($_SESSION['login_alert'] );
 
 
+
 $new_user = create_user($_POST['email'],$_POST['password']);
+
 
 if(!$new_user['success']) {
   $_SESSION['login_alert'] = 'No good';

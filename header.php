@@ -10,7 +10,12 @@ include 'func_check_remember_me.php';
 
 
 require 'db_connect.php';
-$dir = new DirectoryIterator(get_include_path().'global_functions');
+$dir_path = '';
+if($api_layer) {
+  set_include_path('../');
+  $dir_path = get_include_path();
+}
+$dir = new DirectoryIterator($dir_path.'global_functions');
 foreach ($dir as $i) {
     if($i->getExtension() !== 'php' || !$i->isFile()) {
      continue;
