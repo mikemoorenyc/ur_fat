@@ -8,14 +8,13 @@
 
 html,
 body {
- height: 100%;
- width: 100%;
- left: 0;
- top: 0;
  margin: 0;
- overflow: hidden;
- -webkit-overflow-scrolling: auto;
- position: fixed;
+	padding: 0;
+	position:relative;
+	width: 100%;
+	height: 100%;
+	overflow:hidden;
+	-webkit-overflow-scrolling: auto;
 }
 
 body {
@@ -29,29 +28,24 @@ body {
   box-sizing: border-box;
 }
 #root {
-  position: relative;
-  position:relative;
-  margin: 0 auto;
-  width: 100%;
-  max-width: 400px;
-  overflow:hidden;
-  height: 100%;
-  @media(min-width: 402px) {
-    border: 1px solid grey;
-    border-width: 0 1px;
-  }
+  position:fixed;
+	left: 0;
+	top: 0;
+	right: 0;
+	bottom: 0;
 }
 .app {
+  display:flex;
+  flex-direction: column;
+  position:absolute;
+  left: 0;
+  top; 0;
   width: 100%;
-  height: 100vh;
-  position:relative;
-  margin: 0 auto;
+  height: 100%;
 
 }
 //SCAFFOLD
 .app {
-  display:flex;
-  flex-direction: column;
   main {
     flex: 1;
     overflow-x: hidden;
