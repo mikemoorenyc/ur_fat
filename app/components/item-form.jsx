@@ -5,12 +5,17 @@ import linkState from 'linkstate';
 export default class ItemForm extends Component {
   constructor(props) {
     super();
+    let endpoint = "add-item";
+    if(props.editState === "UPDATE") {
+      endpoint = 'update-item';
+    }
     this.state = {
      id: props.item.id,
      title: props.item.post_title,
      amount: props.item.post_amount,
      date: props.item.post_date,
      method: props.editState,
+     endpoint: endpoint,
      transState: ''
     }
     this.resetForm = this.resetForm.bind(this);
@@ -26,10 +31,7 @@ export default class ItemForm extends Component {
     if(!this.state.title) {
       return false;
     }
-    let endpoint = "add-item";
-    if(this.state.method === "UPDATE") {
-      endpoint = 'update-item';
-    }
+    
     let item = {
       id: this.state.id,
       post_title: this.state.title,
@@ -37,7 +39,7 @@ export default class ItemForm extends Component {
       post_date:this.state.date,
       noonce: this.state.noonce
     }
-    global.emitter.emit(endpoint, item);
+    global.emitter.emit(this.state.endpoint, item);
     this.resetForm(e);
   }
   resetForm(e) {
@@ -72,7 +74,7 @@ export default class ItemForm extends Component {
           <div class="button-holder"><button type="reset" disabled={disabled} onClick={this.submitForm}>{submitText}</button></div>
         </header>
         <main>
-          <form onSubmit={this.submitForm}>
+          <form onSubmit={this.submitForm} method="POST" action={this.state.endpoint}>
           <div class="form-row">
             <label>What did you eat?</label>
             <input ref={this.getFocus} type="text" value={state.title} onInput={linkState(this, 'title')} required class="input-text"/>
