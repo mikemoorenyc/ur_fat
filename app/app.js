@@ -112,17 +112,20 @@ class App extends Component {
           edit_noonces: updateNoonces(this.state.edit_noonces,response.data.noonce,newItem.id)
         });
 
-        return false;
+
       }.bind(this))
       .catch(function (error) {
-
-
+        let message = 'No dice on the update'
+        if(error.response.data.message) {
+          message = error.response.data.message
+        }
+        alert(message);
         this.setState({
           today_posts: replaceItem(this.state.today_posts,old_post.id,old_post),
           edit_noonces: updateNoonces(this.state.edit_noonces,error.response.data.noonce,old_post.id)
         });
 
-        return false;
+
       }.bind(this));
 
     }.bind(this))

@@ -31,7 +31,7 @@ export default class ItemForm extends Component {
     if(!this.state.title) {
       return false;
     }
-    
+
     let item = {
       id: this.state.id,
       post_title: this.state.title,
@@ -83,7 +83,7 @@ export default class ItemForm extends Component {
             <label>How much did you eat?</label>
             <input type="text" value={state.amount} onInput={linkState(this, 'amount')}  class="input-text"/>
           </div>
-            <button disabled={disabled} style={{display: "none"}} type="submit">{submitText}</button>
+            <button disabled={disabled} style={{width: 0, height: 0, display:"block", visibility:"hidden", fontSize: "0px"}} type="submit">{submitText}</button>
          </form>
 
         </main>

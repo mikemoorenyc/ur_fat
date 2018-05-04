@@ -2,19 +2,20 @@
 $api_layer = true;
 require '../header.php';
 
-function badRequest($code=400) {
+function badRequest($code=400, $message=null) {
   http_response_code($code);
   $_SESSION['edit_'.$_POST['id'].'_noonce'] = generate_noonce();
   $response = array(
     'noonce' => $_SESSION['edit_'.$_POST['id'].'_noonce'] ,
-    'local_id' => $_POST['id']
+    'local_id' => $_POST['id'],
+    'message' => $message
   );
   echo json_encode($response);
   die();
 }
 
 if($_SESSION['edit_'.$_POST['id'].'_noonce'] !== $_POST['update_noonce'] || !is_user_logged_in()) {
-  badRequest();
+  badRequest(400, "bad noonce");
 }
 unset($_SESSION['edit_'.$_POST['id'].'_noonce']);
 
