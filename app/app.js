@@ -128,7 +128,7 @@ class App extends Component {
     this.deleteListen = global.emitter.addListener('delete-item',function(id,noonce){
       let formdata = new FormData();
       formdata.set('id',id);
-      formdata.set('delete_noonce',this.state.edit_noonces['item_'+id]);
+      formdata.set('delete_noonce',noonce);
       let del_key = this.state.today_posts.findIndex(function(e) {
           return parseInt(e.id) === parseInt(id);
       });
