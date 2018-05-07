@@ -70,14 +70,10 @@ export default class ItemForm extends Component {
   }
   render(props,state) {
 
-   let submitText = "Add";
-   if(state.method === "UPDATE") {
-     submitText = "Save";
-   }
-   let disabled = false;
-   if(state.title.length < 1 || !state.nonce) {
-      disabled = true;
-   }
+   let submitText = (state.method === "UPDATE") ? "Save" : "Add";
+   
+   let disabled = (state.title.length < 1 || !state.nonce)? true : false;
+  
    return (
 
      <div>
