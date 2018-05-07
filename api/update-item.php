@@ -14,7 +14,7 @@ function badRequest($code=400, $message="Bad Request") {
   die();
 }
 if($_SESSION['edit_'.$_POST['id'].'_noonce'] !== $_POST['update_noonce']) {
-  badRequest(400, "bad noonce");
+  badRequest(400, "NOONCE not set correctly SESSION:".$_SESSION['edit_'.$_POST['id'].'_noonce'].', POST:'.$_POST['update_noonce']);
 }
 if(!is_user_logged_in()) {
   badRequest(400, "User not logged in");
