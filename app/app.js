@@ -147,18 +147,18 @@ class App extends Component {
         data: formdata
       })
       .then(function (response) {
-        return false;
+        console.log('deleted')
       }.bind(this))
       .catch(function (error) {
-
+        alert(error.response.data.error_msg);
         this.setState({
           edit_noonces: updateNoonces(this.state.edit_noonces, error.response.data.noonce),
           today_posts: addItem(this.state.today_posts,del_item)
         });
 
-        return false;
+
       }.bind(this));
-      return false;
+
     }.bind(this));
 
     this.newItemListen = global.emitter.addListener('add-item',function(item){
@@ -189,16 +189,16 @@ class App extends Component {
           edit_noonces: updateNoonces(this.state.edit_noonces,d.noonce,d.new_item.id)
         })
 
-        return false;
+
       }.bind(this))
       .catch(function (error) {
-        console.log(error);
+        alert(error.response.data.error_msg);
 
         this.setState({
           today_posts : removeItem(this.state.today_posts, local_id),
           add_item_noonce: error.response.data.add_item_noonce
         })
-        return false;
+
       }.bind(this));
     }.bind(this))
 
