@@ -23,10 +23,7 @@ import { removeItem, addItem, replaceItem } from './utils/list-operations.js';
 class App extends Component {
   constructor(props) {
       super();
-      let logged_in = false;
-      if(props.previousLogin) {
-        logged_in = true;
-      }
+      let logged_in = (props.previousLogin) ? true : false ;
       let start = new Date();
       start.setHours(0,0,0,0);
       let end = new Date();
@@ -85,10 +82,10 @@ class App extends Component {
       this.setState({openItem: id});
     }.bind(this))
 
-    this.updateListen = global.emitter.addListener('update-item',function(item){
+    this.updateListen = global.emitter.addListener('update-item',function(item,nonce){
       let formdata = new FormData();
       formdata.set('id',item.id);
-      formdata.set('update_noonce',this.state.edit_noonces['item_'+item.id]);
+      formdata.set('update_noonce',nonce);
       formdata.set('post_title',item.post_title);
       formdata.set('post_amount',item.post_amount);
       let update_key = this.state.today_posts.findIndex(function(e){
@@ -115,10 +112,8 @@ class App extends Component {
 
       }.bind(this))
       .catch(function (error) {
-        let message = 'No dice on the update'
-        if(error.response.data.message) {
-          message = error.response.data.message
-        }
+        let message = error.response.data.message || 'No dice on the update';
+      
         alert(message);
         this.setState({
           today_posts: replaceItem(this.state.today_posts,old_post.id,old_post),
@@ -161,12 +156,12 @@ class App extends Component {
 
     }.bind(this));
 
-    this.newItemListen = global.emitter.addListener('add-item',function(item){
+    this.newItemListen = global.emitter.addListener('add-item',function(item,nonce){
       let formdata = new FormData();
       formdata.set('post_title',item.post_title);
       formdata.set('post_amount',item.post_amount);
       formdata.set('local_id',item.id);
-      formdata.set('add_item_noonce',this.state.add_item_noonce);
+      formdata.set('add_item_noonce',nonce);
       //ADD LOCALLY
       var local_id = item.id;
       this.setState({
@@ -295,11 +290,8 @@ class App extends Component {
 
 
   render(props, state) {
-    let disableAdd = false,
+    let disableAdd = (!state.add_item_noonce) ? true : false,
         editForm = null;
-    if(!state.add_item_noonce) {
-       disableAdd = true;
-    }
     if( ( !state.logged_in)) {
       return <div class="app"><LoginForm /></div>;
     }
