@@ -5,10 +5,7 @@ import linkState from 'linkstate';
 export default class ItemForm extends Component {
   constructor(props) {
     super();
-    let endpoint = "add-item";
-    if(props.editState === "UPDATE") {
-      endpoint = 'update-item';
-    }
+    let endpoint = (props.editState === "UPDATE") ? 'update-item' : "add-item";
     this.state = {
      id: props.item.id,
      title: props.item.post_title,
@@ -16,7 +13,8 @@ export default class ItemForm extends Component {
      date: props.item.post_date,
      method: props.editState,
      endpoint: endpoint,
-     transState: ''
+     transState: '',
+     nonce: null
     }
     this.resetForm = this.resetForm.bind(this);
     this.submitForm = this.submitForm.bind(this);
@@ -39,7 +37,7 @@ export default class ItemForm extends Component {
       post_date:this.state.date,
       noonce: this.state.noonce
     }
-    global.emitter.emit(this.state.endpoint, item);
+    global.emitter.emit(this.state.endpoint, item, this.state.nonce);
     this.resetForm(e);
   }
   resetForm(e) {
@@ -51,7 +49,24 @@ export default class ItemForm extends Component {
     this.setState({transState: 'translateX(0)'});
     if(this.autoFocus && this.state.method == "ADD") {
       this.autoFocus.focus();
-     }
+    }
+    let formdata = new FormData();
+    let nonce_key = (this.state.endpoint === "update-item") ? 'edit_'+this.state.id+'_noonce' : "add_item_noonce";
+ 
+    formdata.set('noonce_key',nonce_key);
+    axios({
+      method: 'post',
+      url: window.location.pathname+'api/create-noonce.php',
+      config: { headers: {'Content-Type': 'multipart/form-data' }},
+      data: formdata
+    })
+    .then(function (response) {
+      this.setState({nonce: response.data[nonce_key]});
+      
+    }.bind(this))
+    .catch(function (error) {
+      alert('Could not get a login noonce');
+    })
   }
   render(props,state) {
 
@@ -60,7 +75,7 @@ export default class ItemForm extends Component {
      submitText = "Save";
    }
    let disabled = false;
-   if(state.title.length < 1) {
+   if(state.title.length < 1 || !state.nonce) {
       disabled = true;
    }
    return (
