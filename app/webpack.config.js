@@ -2,6 +2,7 @@
 var HtmlWebpackPlugin = require('html-webpack-plugin');
 var ExtractTextPlugin = require('extract-text-webpack-plugin');
 module.exports = {
+  mode: 'production',
   entry: "./app.js",//path relative to this file
   output: {
     path: __dirname + "/../dist",
@@ -39,7 +40,7 @@ module.exports = {
         new HtmlWebpackPlugin({
             hash: true,
             filename: '../index.html',
-            template: './index.html'
+            template: './index-template.html'
         }),
 
 

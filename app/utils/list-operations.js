@@ -34,9 +34,9 @@ function replaceItem(old_list, id, item, top_threshold, bottom_threshold) {
     return sorter(updatePosts,top_threshold,bottom_threshold);
   }
   updatePosts[replace_index] = item;
-  
+
   return sorter(updatePosts,top_threshold,bottom_threshold);
 }
 
 
-export { removeItem, replaceItem, addItem };
+export { removeItem, replaceItem, addItem, sorter };

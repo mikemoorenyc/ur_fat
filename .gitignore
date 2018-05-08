@@ -1,5 +1,5 @@
 database_info.php
 app/node_modules/*
 app.html
-index.html
+/index.html
 dist/*

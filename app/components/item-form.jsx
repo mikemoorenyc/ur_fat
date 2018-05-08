@@ -1,6 +1,6 @@
 import { h, render, Component  } from 'preact';
 import linkState from 'linkstate';
-
+import axios from "axios";
 
 export default class ItemForm extends Component {
   constructor(props) {
@@ -52,7 +52,7 @@ export default class ItemForm extends Component {
     }
     let formdata = new FormData();
     let nonce_key = (this.state.endpoint === "update-item") ? 'edit_'+this.state.id+'_noonce' : "add_item_noonce";
- 
+
     formdata.set('noonce_key',nonce_key);
     axios({
       method: 'post',
@@ -62,18 +62,20 @@ export default class ItemForm extends Component {
     })
     .then(function (response) {
       this.setState({nonce: response.data[nonce_key]});
-      
+      console.log(response);
+      console.log(this.state);
     }.bind(this))
     .catch(function (error) {
+      console.log(error);
       alert('Could not get a login noonce');
     })
   }
   render(props,state) {
 
    let submitText = (state.method === "UPDATE") ? "Save" : "Add";
-   
+
    let disabled = (state.title.length < 1 || !state.nonce)? true : false;
-  
+
    return (
 
      <div>

@@ -18,7 +18,7 @@ import List from './components/List.js';
 import NavButton from './components/NavButton.jsx';
 
 import updateNoonces from './utils/update-noonce.js';
-import { removeItem, addItem, replaceItem } from './utils/list-operations.js';
+import { removeItem, addItem, replaceItem,sorter } from './utils/list-operations.js';
 
 class App extends Component {
   constructor(props) {
@@ -28,6 +28,11 @@ class App extends Component {
       start.setHours(0,0,0,0);
       let end = new Date();
       end.setHours(23,59,59,999);
+      start = Math.floor(start.getTime() / 1000);
+      end = Math.floor(end.getTime() / 1000);
+      console.log(localStorage.getItem("urfat_today_posts"));
+      let todayPosts = JSON.parse(localStorage.getItem("urfat_today_posts")) || [];
+
       this.state = {
         logged_in : logged_in,
         user: null,
@@ -37,10 +42,10 @@ class App extends Component {
         form_opened: false,
         add_item_noonce: null,
         fetching_posts: true,
-        today_posts: [],
+        today_posts: sorter(todayPosts,end,start),
         edit_noonces: [],
-        top_threshold: Math.floor(end.getTime() / 1000),
-        bottom_threshold: Math.floor(start.getTime() / 1000),
+        top_threshold: end,
+        bottom_threshold: start,
         editing: false,
         editItem: null,
         openItem: null
@@ -113,7 +118,7 @@ class App extends Component {
       }.bind(this))
       .catch(function (error) {
         let message = error.response.data.message || 'No dice on the update';
-      
+
         alert(message);
         this.setState({
           today_posts: replaceItem(this.state.today_posts,old_post.id,old_post),
@@ -235,6 +240,7 @@ class App extends Component {
         fetching_posts: false,
         edit_noonces: d.edit_noonces
       });
+      localStorage.setItem('urfat_today_posts',JSON.stringify(this.state.today_posts));
 
       return false;
     }.bind(this))
@@ -302,7 +308,7 @@ class App extends Component {
       <div>
       <div class="app">
         <header>
-          <h1>What you ate today</h1>
+          <h1>What You Ate Today</h1>
         </header>
         <main onScroll={this.windowListener}>
           <List

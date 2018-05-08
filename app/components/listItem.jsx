@@ -1,14 +1,14 @@
 import { h, render, Component } from 'preact';
 import DeleteBtn from '../components/DeleteBtn.js';
 import UpdateBtn from '../components/UpdateBtn.js';
-
+import axios from "axios";
 var Hammer = require('hammerjs');
 
 export default class ListItem extends Component {
   constructor(props) {
     super();
     this.state = {
-     del_nonce : null 
+     del_nonce : null
     }
     this.itemDOM = null;
     this.getItemDOM = function(element) {
@@ -19,7 +19,7 @@ export default class ListItem extends Component {
   getDelNonce() {
     let formdata = new FormData();
     let nonce_key =  'edit_'+this.props.item.id+'_noonce' ;
- 
+
     formdata.set('noonce_key',nonce_key);
     axios({
       method: 'post',
@@ -29,12 +29,12 @@ export default class ListItem extends Component {
     })
     .then(function (response) {
       this.setState({del_nonce: response.data[nonce_key]});
-      
+
     }.bind(this))
     .catch(function (error) {
       alert('Could not get a login noonce');
-    }) 
-    
+    })
+
   }
   componentDidMount() {
     this.swipeDetector = new Hammer(this.itemDOM);
@@ -54,9 +54,9 @@ export default class ListItem extends Component {
   }
 
   render(props,state) {
-   let amt = (props.item.post_amount)? <span><strong>{props.item.post_amount}</strong> {of} </span> : '',
-       of = (props.item.post_amount && isNaN(props.item.post_amount))? "of " : '',
-       classList = "list-item ";
+   let  of = (props.item.post_amount && isNaN(props.item.post_amount))? "of " : '',
+        amt = (props.item.post_amount)? <span><strong>{props.item.post_amount}</strong> {of} </span> : '',
+        classList = "list-item ";
    if(props.openItem === props.item.id) {
     classList += 'opened';
    }
