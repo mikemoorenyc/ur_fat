@@ -8,7 +8,7 @@ include 'func_request_check.php';
 include 'func_check_remember_me.php';
 */
 
-
+define("REMEMBER_ME_NAME", "plantdaddy_remember_me");
 require 'db_connect.php';
 $dir_path = '';
 if($api_layer) {
